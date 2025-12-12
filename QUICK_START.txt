@@ -1,0 +1,66 @@
+========================================
+QUICK START - Raspberry Pi
+========================================
+
+STEP 1: Copy Files to Pi
+-------------------------
+Copy the entire "raspberry" folder to your Raspberry Pi
+
+
+STEP 2: Install Dependencies
+-----------------------------
+Run the installation script:
+    chmod +x INSTALL.sh
+    ./INSTALL.sh
+
+OR install manually:
+    sudo apt update
+    sudo apt install -y python3-pip python3-opencv
+    pip3 install numpy opencv-python RPi.GPIO dlib
+
+
+STEP 3: Download Shape Predictor (Optional)
+--------------------------------------------
+    wget http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
+    bunzip2 shape_predictor_68_face_landmarks.dat.bz2
+
+
+STEP 4: Configure Hardware
+----------------------------
+1. Connect USB cameras
+2. Find camera indices: ls -l /dev/video*
+3. Update config.json:
+   "driver_cam_index": 0
+   "road_cam_index": 1
+
+4. Connect buzzer to GPIO 18 (optional)
+5. Connect mute button to GPIO 16 (optional)
+
+
+STEP 5: Run
+-----------
+    cd raspberry
+    python3 main.py
+
+
+TROUBLESHOOTING
+---------------
+❌ Camera not detected?
+   → ls -l /dev/video*
+   → Update config.json with correct index
+
+❌ GPIO not working?
+   → Check wiring
+   → Verify GPIO pin numbers in config.json
+
+❌ Low performance?
+   → Reduce resolution in config.json
+   → Lower FPS to 10
+
+❌ Face not detected?
+   → Check lighting
+   → Position camera correctly
+
+
+For detailed help, see: README.md
+

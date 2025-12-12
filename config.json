@@ -1,0 +1,58 @@
+{
+  "cameras": {
+    "driver_cam_index": 0,
+    "road_cam_index": 1,
+    "_note": "Test cameras first with: python3 test_cameras.py",
+    "resolution": {
+      "width": 320,
+      "height": 240
+    },
+    "fps": 15
+  },
+  "detection": {
+    "eye_ar_threshold": 0.25,
+    "eye_ar_consec_frames": 3,
+    "mouth_ar_threshold": 0.6,
+    "yawn_consec_frames": 10,
+    "head_pitch_threshold": 15.0,
+    "nod_consec_frames": 5,
+    "perclos_window_seconds": 45,
+    "blink_window_seconds": 60
+  },
+  "scoring": {
+    "perclos_weight": 0.6,
+    "blinks_per_min_weight": 0.4,
+    "perclos_threshold": 0.15,
+    "blinks_per_min_threshold": 20,
+    "yawn_penalty": 10,
+    "nod_penalty": 5,
+    "texting_penalty": 25,
+    "car_close_penalty": 30
+  },
+  "alerts": {
+    "risk_threshold": 50,
+    "buzzer_gpio_pin": 18,
+    "mute_button_gpio_pin": 16,
+    "cooldown_seconds": 8,
+    "mute_duration_seconds": 30,
+    "buzzer_frequency_hz": 2000,
+    "buzzer_duration_ms": 500
+  },
+  "road_detection": {
+    "car_close_threshold": 0.3,
+    "motion_sensitivity": 0.05,
+    "texting_detection_enabled": true,
+    "texting_hand_threshold": 0.4
+  },
+  "logging": {
+    "csv_file": "drowsiness_log.csv",
+    "log_interval_seconds": 1
+  },
+  "display": {
+    "show_hud": true,
+    "hud_position": "top_left",
+    "font_scale": 0.6,
+    "font_thickness": 2
+  }
+}
+
