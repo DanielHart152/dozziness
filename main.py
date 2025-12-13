@@ -113,7 +113,7 @@ class DrowsinessMonitor:
         hud_x = 10
         hud_y = 10
         hud_w = 280
-        hud_h = 220
+        hud_h = 245
         
         cv2.rectangle(overlay, (hud_x, hud_y), (hud_x + hud_w, hud_y + hud_h), (0, 0, 0), -1)
         cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
@@ -139,6 +139,11 @@ class DrowsinessMonitor:
         bpm = metrics.get('blinks_per_min', 0.0)
         cv2.putText(frame, f"Blinks/min: {bpm:.1f}", (hud_x + 5, hud_y + y_offset),
                    cv2.FONT_HERSHEY_SIMPLEX, self.font_scale, (255, 255, 255), self.font_thickness)
+        y_offset += line_height
+        
+        # Speed display (placeholder for future sensor integration)
+        cv2.putText(frame, "Speed: 0 km/h (No sensor)", (hud_x + 5, hud_y + y_offset),
+                   cv2.FONT_HERSHEY_SIMPLEX, self.font_scale, (128, 128, 128), self.font_thickness)
         y_offset += line_height
         
         face_status = "Face: YES" if metrics.get('face_detected', False) else "Face: NO"
