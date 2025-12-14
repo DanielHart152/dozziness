@@ -274,7 +274,7 @@ class FaceDetector:
                 [x + w//4, y + h//3], [x + w//2, y + h//3], [x + 3*w//4, y + h//3],
                 [x + w//2, y + h//2], [x + w//2, y + 4*h//5], [x + w//2, y + h//4],
             ])
-            return ((x, y, w, h), mock_landmarks, eye_count)
+            return ((x, y, w, h), mock_landmarks, eye_count, (x, y, w, h))
         
         if self.predictor is None or self.detector is None:
             return None
@@ -287,14 +287,14 @@ class FaceDetector:
         face_rect = faces[0]
         
         # Initialize tracker with detected face
+        bbox = (face_rect.left(), face_rect.top(), 
+               face_rect.width(), face_rect.height())
         if not self.tracking_active:
-            bbox = (face_rect.left(), face_rect.top(), 
-                   face_rect.width(), face_rect.height())
             self.init_face_tracker(frame, bbox)
         
         landmarks = self.predictor(gray, face_rect)
         landmarks_array = np.array([[p.x, p.y] for p in landmarks.parts()])
-        return (face_rect, landmarks_array)
+        return (face_rect, landmarks_array, bbox)
     
     def process_frame(self, frame: np.ndarray) -> Dict:
         """Process frame for drowsiness indicators."""
@@ -304,7 +304,8 @@ class FaceDetector:
             'face_detected': False, 'left_ear': 0.0, 'right_ear': 0.0, 'avg_ear': 0.0,
             'mar': 0.0, 'head_pitch': 0.0, 'eyes_closed': False,
             'blink_detected': False, 'yawn_detected': False, 'nod_detected': False,
-            'face_tracked': self.tracking_active, 'face_movement_detected': False
+            'face_tracked': self.tracking_active, 'face_movement_detected': False,
+            'face_bbox': None, 'tracking_center': None, 'last_center': None
         }
         
         face_data = self.detect_face(frame)
@@ -316,13 +317,25 @@ class FaceDetector:
         result['face_tracked'] = self.tracking_active
         
         # Check for face movement if tracking
-        if len(face_data) > 2 and face_data[-1] is not None:
-            tracked_bbox = face_data[-1]
-            if isinstance(tracked_bbox, tuple) and len(tracked_bbox) == 4:
-                result['face_movement_detected'] = self.detect_face_movement(tracked_bbox)
+        tracked_bbox = None
+        if len(face_data) >= 3:
+            tracked_bbox = face_data[-1]  # Last element should be bbox
+        elif len(face_data) >= 4:
+            tracked_bbox = face_data[3]   # Fourth element for OpenCV case
         
-        if self.use_dlib and len(face_data) == 2:
-            face_rect, landmarks = face_data
+        if tracked_bbox is not None and isinstance(tracked_bbox, tuple) and len(tracked_bbox) == 4:
+            result['face_movement_detected'] = self.detect_face_movement(tracked_bbox)
+            result['face_bbox'] = tracked_bbox
+            # Calculate current center for tracking line
+            x, y, w, h = tracked_bbox
+            result['tracking_center'] = (x + w//2, y + h//2)
+            # Get last center if available
+            if self.last_face_position:
+                lx, ly, lw, lh = self.last_face_position
+                result['last_center'] = (lx + lw//2, ly + lh//2)
+        
+        if self.use_dlib and len(face_data) >= 2:
+            face_rect, landmarks = face_data[0], face_data[1]
             left_eye = landmarks[self.LEFT_EYE_POINTS]
             right_eye = landmarks[self.RIGHT_EYE_POINTS]
             left_ear = self.eye_aspect_ratio(left_eye)
@@ -337,10 +350,10 @@ class FaceDetector:
             pitch = self.head_pitch_angle(landmarks)
             result['head_pitch'] = pitch
         else:
-            if len(face_data) == 3:
-                face_rect, landmarks, eye_count = face_data
+            if len(face_data) >= 3:
+                face_rect, landmarks, eye_count = face_data[0], face_data[1], face_data[2]
             else:
-                face_rect, landmarks = face_data
+                face_rect, landmarks = face_data[0], face_data[1]
                 eye_count = 2
             eyes_visible = eye_count >= 2
             avg_ear = 0.3 if eyes_visible else 0.15
