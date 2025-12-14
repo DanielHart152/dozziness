@@ -40,9 +40,9 @@
     "penalty_window_cap": 40.0
   },
   "alerts": {
-    "risk_threshold": 50,
-    "alert_on_threshold": 70.0,
-    "alert_off_threshold": 55.0,
+    "risk_threshold": 30,
+    "alert_on_threshold": 40.0,
+    "alert_off_threshold": 20.0,
     "hold_on_sec": 1.0,
     "hold_off_sec": 2.0,
     "buzzer_gpio_pin": 18,
@@ -60,7 +60,11 @@
   },
   "logging": {
     "csv_file": "drowsiness_log.csv",
-    "log_interval_seconds": 1
+    "log_interval_seconds": 1,
+    "debug_enabled": true,
+    "debug_file": "scorer_debug.log",
+    "debug_level": "DEBUG",
+    "debug_interval_seconds": 1
   },
   "display": {
     "show_hud": true,

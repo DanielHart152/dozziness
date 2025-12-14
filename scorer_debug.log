@@ -1,0 +1,706 @@
+2025-12-14 04:30:51,897 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:51,897 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2000, BPM=9.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:51,897 - scorer_debug - DEBUG - PERCLOS: input=0.2000, clamped=0.2000, raw=40.00, final=24.00 (weight=0.6)
+2025-12-14 04:30:51,898 - scorer_debug - DEBUG - BLINKS (triangular): bpm=9.0, target=16.0, deviation=7.0, tol=16.0, raw=28.12
+2025-12-14 04:30:51,898 - scorer_debug - DEBUG - BLINKS final: 11.25 (weight=0.4)
+2025-12-14 04:30:51,898 - scorer_debug - DEBUG - PENALTY awarded: yawn=10.0pts (last=2765715451.9s ago)
+2025-12-14 04:30:51,898 - scorer_debug - DEBUG - PENALTY window: 1 active, total=10.0, capped=10.0, new=[('yawn', 10.0)]
+2025-12-14 04:30:51,899 - scorer_debug - DEBUG - Score components: PERCLOS=24.00 + BLINKS=11.25 + PENALTIES=10.00 = 45.25
+2025-12-14 04:30:51,899 - scorer_debug - DEBUG - Final score: 45.25 (clamped from 45.25)
+2025-12-14 04:30:51,899 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:51,899 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:51,899 - scorer_debug - DEBUG - Added ad-hoc score: 45.25
+2025-12-14 04:30:51,899 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:51,899 - scorer_debug - DEBUG - Rolling avg (1.0s): 2 scores, avg=45.25, scores=[('0.0s', '45.2'), ('0.0s', '45.2')]
+2025-12-14 04:30:51,900 - scorer_debug - DEBUG - Rolling avg (2.0s): 2 scores, avg=45.25, scores=[('0.0s', '45.2'), ('0.0s', '45.2')]
+2025-12-14 04:30:51,900 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=45.25 (need>=70.0), avg_off=45.25 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:51,900 - scorer_debug - DEBUG - Alert blocked: avg_on=45.25 < 70.0
+2025-12-14 04:30:51,900 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:52,006 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,006 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=6.0, yawn=True, nod=True, texting=False, car_close=False
+2025-12-14 04:30:52,006 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,007 - scorer_debug - DEBUG - BLINKS (triangular): bpm=6.0, target=16.0, deviation=10.0, tol=16.0, raw=18.75
+2025-12-14 04:30:52,007 - scorer_debug - DEBUG - BLINKS final: 7.50 (weight=0.4)
+2025-12-14 04:30:52,007 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.1s < 10.0s)
+2025-12-14 04:30:52,007 - scorer_debug - DEBUG - PENALTY awarded: nod=5.0pts (last=2765715452.0s ago)
+2025-12-14 04:30:52,007 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[('nod', 5.0)]
+2025-12-14 04:30:52,007 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=7.50 + PENALTIES=15.00 = 52.50
+2025-12-14 04:30:52,008 - scorer_debug - DEBUG - Final score: 52.50 (clamped from 52.50)
+2025-12-14 04:30:52,008 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,008 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:52,008 - scorer_debug - DEBUG - Added ad-hoc score: 52.50
+2025-12-14 04:30:52,008 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:52,008 - scorer_debug - DEBUG - Rolling avg (1.0s): 4 scores, avg=48.88, scores=[('0.0s', '52.5'), ('0.0s', '52.5'), ('0.1s', '45.2')]
+2025-12-14 04:30:52,008 - scorer_debug - DEBUG - Rolling avg (2.0s): 4 scores, avg=48.88, scores=[('0.0s', '52.5'), ('0.0s', '52.5'), ('0.1s', '45.2')]
+2025-12-14 04:30:52,009 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=48.88 (need>=70.0), avg_off=48.88 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:52,009 - scorer_debug - DEBUG - Alert blocked: avg_on=48.88 < 70.0
+2025-12-14 04:30:52,009 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:52,114 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,114 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,114 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:52,114 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:52,114 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:52,114 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,115 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:52,115 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:52,115 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,115 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:52,115 - scorer_debug - DEBUG - Added ad-hoc score: 41.00
+2025-12-14 04:30:52,115 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:52,115 - scorer_debug - DEBUG - Rolling avg (1.0s): 6 scores, avg=46.25, scores=[('0.0s', '41.0'), ('0.0s', '41.0'), ('0.1s', '52.5')]
+2025-12-14 04:30:52,116 - scorer_debug - DEBUG - Rolling avg (2.0s): 6 scores, avg=46.25, scores=[('0.0s', '41.0'), ('0.0s', '41.0'), ('0.1s', '52.5')]
+2025-12-14 04:30:52,116 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=46.25 (need>=70.0), avg_off=46.25 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:52,116 - scorer_debug - DEBUG - Alert blocked: avg_on=46.25 < 70.0
+2025-12-14 04:30:52,116 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:52,116 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,116 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,116 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,116 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,117 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,117 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.2s < 10.0s)
+2025-12-14 04:30:52,117 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,117 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,117 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,117 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,176 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:52,176 - scorer_debug - DEBUG - Added ad-hoc score: 51.25
+2025-12-14 04:30:52,176 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:52,176 - scorer_debug - DEBUG - Rolling avg (1.0s): 8 scores, avg=47.50, scores=[('0.0s', '51.2'), ('0.1s', '51.2'), ('0.1s', '41.0')]
+2025-12-14 04:30:52,177 - scorer_debug - DEBUG - Rolling avg (2.0s): 8 scores, avg=47.50, scores=[('0.0s', '51.2'), ('0.1s', '51.2'), ('0.1s', '41.0')]
+2025-12-14 04:30:52,177 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=47.50 (need>=70.0), avg_off=47.50 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:52,177 - scorer_debug - DEBUG - Alert blocked: avg_on=47.50 < 70.0
+2025-12-14 04:30:52,177 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:52,177 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,177 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,178 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,178 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,178 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,178 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.3s < 10.0s)
+2025-12-14 04:30:52,178 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,179 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,179 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,179 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,240 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,240 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,240 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,241 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,241 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,241 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.3s < 10.0s)
+2025-12-14 04:30:52,241 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,241 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,241 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,242 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,302 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,302 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,302 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,302 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,302 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,302 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.4s < 10.0s)
+2025-12-14 04:30:52,303 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,303 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,303 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,303 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,364 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,364 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,364 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,364 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,364 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,364 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.5s < 10.0s)
+2025-12-14 04:30:52,365 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,365 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,365 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,365 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,427 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,427 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,427 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,427 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,428 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,428 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.5s < 10.0s)
+2025-12-14 04:30:52,428 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,428 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,428 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,428 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,490 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:52,490 - scorer_debug - DEBUG - Added ad-hoc score: 51.25
+2025-12-14 04:30:52,490 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:52,490 - scorer_debug - DEBUG - Rolling avg (1.0s): 14 scores, avg=49.11, scores=[('0.0s', '51.2'), ('0.1s', '51.2'), ('0.1s', '51.2')]
+2025-12-14 04:30:52,490 - scorer_debug - DEBUG - Rolling avg (2.0s): 14 scores, avg=49.11, scores=[('0.0s', '51.2'), ('0.1s', '51.2'), ('0.1s', '51.2')]
+2025-12-14 04:30:52,490 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=49.11 (need>=70.0), avg_off=49.11 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:52,490 - scorer_debug - DEBUG - Alert blocked: avg_on=49.11 < 70.0
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.6s < 10.0s)
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,491 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,492 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,551 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,551 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,551 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,551 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,551 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,551 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.7s < 10.0s)
+2025-12-14 04:30:52,551 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,552 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,552 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,552 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,614 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,614 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,614 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,614 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,614 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,614 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.7s < 10.0s)
+2025-12-14 04:30:52,615 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,615 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,615 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,615 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,674 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,674 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,674 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,675 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,675 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,675 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.8s < 10.0s)
+2025-12-14 04:30:52,675 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,675 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,675 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,675 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,736 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,736 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,736 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,736 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,737 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,737 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.8s < 10.0s)
+2025-12-14 04:30:52,737 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,737 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,737 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,737 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,797 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:52,797 - scorer_debug - DEBUG - Added ad-hoc score: 51.25
+2025-12-14 04:30:52,797 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:52,797 - scorer_debug - DEBUG - Rolling avg (1.0s): 20 scores, avg=49.75, scores=[('0.0s', '51.2'), ('0.1s', '51.2'), ('0.1s', '51.2')]
+2025-12-14 04:30:52,797 - scorer_debug - DEBUG - Rolling avg (2.0s): 20 scores, avg=49.75, scores=[('0.0s', '51.2'), ('0.1s', '51.2'), ('0.1s', '51.2')]
+2025-12-14 04:30:52,798 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=49.75 (need>=70.0), avg_off=49.75 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:52,798 - scorer_debug - DEBUG - Alert blocked: avg_on=49.75 < 70.0
+2025-12-14 04:30:52,798 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:52,798 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,798 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,798 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,798 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,798 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,798 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (0.9s < 10.0s)
+2025-12-14 04:30:52,799 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,799 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,799 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,799 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,862 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,862 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,863 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,863 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,863 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,863 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (1.0s < 10.0s)
+2025-12-14 04:30:52,863 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,863 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,863 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,864 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,924 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,924 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,924 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,924 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,925 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,925 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (1.0s < 10.0s)
+2025-12-14 04:30:52,925 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,925 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,925 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,925 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:52,986 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:52,986 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:52,986 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:52,986 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:52,986 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:52,986 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (1.1s < 10.0s)
+2025-12-14 04:30:52,986 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:52,987 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:52,987 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:52,987 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,048 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,048 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,048 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:53,048 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:53,048 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:53,048 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (1.2s < 10.0s)
+2025-12-14 04:30:53,048 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,048 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:53,049 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:53,049 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,110 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:53,110 - scorer_debug - DEBUG - Added ad-hoc score: 51.25
+2025-12-14 04:30:53,110 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:53,110 - scorer_debug - DEBUG - Rolling avg (1.0s): 22 scores, avg=50.32, scores=[('0.0s', '51.2'), ('0.1s', '51.2'), ('0.1s', '51.2')]
+2025-12-14 04:30:53,110 - scorer_debug - DEBUG - Rolling avg (2.0s): 26 scores, avg=50.10, scores=[('0.0s', '51.2'), ('0.1s', '51.2'), ('0.1s', '51.2')]
+2025-12-14 04:30:53,110 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=50.32 (need>=70.0), avg_off=50.10 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:53,111 - scorer_debug - DEBUG - Alert blocked: avg_on=50.32 < 70.0
+2025-12-14 04:30:53,111 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:53,111 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,111 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,111 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:53,111 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:53,111 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:53,111 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (1.2s < 10.0s)
+2025-12-14 04:30:53,112 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,112 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:53,112 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:53,112 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,173 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,173 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,174 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:53,174 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:53,174 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:53,174 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (1.3s < 10.0s)
+2025-12-14 04:30:53,175 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,175 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:53,175 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:53,175 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,236 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,236 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,236 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:53,236 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:53,236 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:53,236 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (1.3s < 10.0s)
+2025-12-14 04:30:53,236 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,237 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:53,237 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:53,237 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,298 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,298 - scorer_debug - DEBUG - Inputs: PERCLOS=0.2500, BPM=5.0, yawn=True, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,298 - scorer_debug - DEBUG - PERCLOS: input=0.2500, clamped=0.2500, raw=50.00, final=30.00 (weight=0.6)
+2025-12-14 04:30:53,298 - scorer_debug - DEBUG - BLINKS (triangular): bpm=5.0, target=16.0, deviation=11.0, tol=16.0, raw=15.62
+2025-12-14 04:30:53,298 - scorer_debug - DEBUG - BLINKS final: 6.25 (weight=0.4)
+2025-12-14 04:30:53,298 - scorer_debug - DEBUG - PENALTY blocked: yawn in refractory (1.4s < 10.0s)
+2025-12-14 04:30:53,298 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,298 - scorer_debug - DEBUG - Score components: PERCLOS=30.00 + BLINKS=6.25 + PENALTIES=15.00 = 51.25
+2025-12-14 04:30:53,299 - scorer_debug - DEBUG - Final score: 51.25 (clamped from 51.25)
+2025-12-14 04:30:53,299 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,360 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,360 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,360 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,360 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,360 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,361 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,361 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,361 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,361 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,422 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:53,422 - scorer_debug - DEBUG - Added ad-hoc score: 41.00
+2025-12-14 04:30:53,422 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:53,422 - scorer_debug - DEBUG - Rolling avg (1.0s): 20 scores, avg=50.23, scores=[('0.0s', '41.0'), ('0.1s', '41.0'), ('0.1s', '51.2')]
+2025-12-14 04:30:53,422 - scorer_debug - DEBUG - Rolling avg (2.0s): 32 scores, avg=49.67, scores=[('0.0s', '41.0'), ('0.1s', '41.0'), ('0.1s', '51.2')]
+2025-12-14 04:30:53,423 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=50.23 (need>=70.0), avg_off=49.67 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:53,423 - scorer_debug - DEBUG - Alert blocked: avg_on=50.23 < 70.0
+2025-12-14 04:30:53,423 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:53,423 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,423 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,423 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,423 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,423 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,424 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,424 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,424 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,424 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,484 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,484 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,484 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,484 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,484 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,484 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,485 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,485 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,485 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,545 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,545 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,545 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,546 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,546 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,546 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,546 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,546 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,547 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,608 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,608 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,608 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,608 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,608 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,608 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,609 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,609 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,609 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,671 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,671 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,671 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,671 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,672 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,672 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,672 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,672 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,672 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,734 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,734 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,734 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,734 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,734 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,734 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,734 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,735 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,735 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,795 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,795 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,796 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,796 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,796 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,796 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,796 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,796 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,796 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,857 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,857 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,857 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,858 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,858 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,858 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,858 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,858 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,858 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,918 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,918 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,918 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,918 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,918 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,919 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,919 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,919 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,919 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:53,981 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:53,981 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:53,981 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:53,981 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:53,981 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:53,981 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:53,981 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:53,982 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:53,982 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,043 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:54,043 - scorer_debug - DEBUG - Added ad-hoc score: 41.00
+2025-12-14 04:30:54,043 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:54,044 - scorer_debug - DEBUG - Rolling avg (1.0s): 19 scores, avg=44.24, scores=[('0.0s', '41.0'), ('0.1s', '41.0'), ('0.1s', '41.0')]
+2025-12-14 04:30:54,044 - scorer_debug - DEBUG - Rolling avg (2.0s): 39 scores, avg=47.31, scores=[('0.0s', '41.0'), ('0.1s', '41.0'), ('0.1s', '41.0')]
+2025-12-14 04:30:54,044 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=44.24 (need>=70.0), avg_off=47.31 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:54,044 - scorer_debug - DEBUG - Alert blocked: avg_on=44.24 < 70.0
+2025-12-14 04:30:54,044 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:54,045 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,045 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,046 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,046 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,046 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,046 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,047 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,047 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,047 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,105 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,105 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,105 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,106 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,106 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,106 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,106 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,106 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,106 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,169 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,169 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,169 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,169 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,170 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,170 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,170 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,170 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,170 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,231 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,231 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,231 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,232 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,232 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,232 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,232 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,232 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,232 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,295 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,296 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,296 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,296 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,296 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,297 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,297 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,298 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,298 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,356 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,356 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,356 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,357 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,357 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,357 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,357 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,357 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,358 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,417 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,417 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,417 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,417 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,418 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,418 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,418 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,418 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,418 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,480 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,480 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,480 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,481 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,481 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,481 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,481 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,482 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,482 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,542 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,542 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,542 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,543 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,543 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,543 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,543 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,543 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,544 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,606 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,606 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,606 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,607 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,607 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,607 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,607 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,607 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,608 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,667 - scorer_debug - DEBUG - 
+--- ALERT DECISION START ---
+2025-12-14 04:30:54,667 - scorer_debug - DEBUG - Added ad-hoc score: 41.00
+2025-12-14 04:30:54,667 - scorer_debug - DEBUG - Calculating rolling averages...
+2025-12-14 04:30:54,667 - scorer_debug - DEBUG - Rolling avg (1.0s): 18 scores, avg=41.00, scores=[('0.0s', '41.0'), ('0.1s', '41.0'), ('0.1s', '41.0')]
+2025-12-14 04:30:54,667 - scorer_debug - DEBUG - Rolling avg (2.0s): 37 scores, avg=44.60, scores=[('0.0s', '41.0'), ('0.1s', '41.0'), ('0.1s', '41.0')]
+2025-12-14 04:30:54,667 - scorer_debug - DEBUG - Alert state: currently=False, avg_on=41.00 (need>=70.0), avg_off=44.60 (need<=55.0), cooldown=0.0s
+2025-12-14 04:30:54,667 - scorer_debug - DEBUG - Alert blocked: avg_on=41.00 < 70.0
+2025-12-14 04:30:54,669 - scorer_debug - DEBUG - --- ALERT DECISION END: False ---
+
+2025-12-14 04:30:54,669 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,669 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,669 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,669 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,669 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,669 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,669 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,669 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,670 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,728 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,728 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,728 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,728 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,728 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,729 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,729 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,729 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,731 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,790 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,790 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,791 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,791 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,791 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,791 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,791 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,791 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,792 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,852 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,852 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,852 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,852 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,852 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,852 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,852 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,853 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,853 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,914 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,914 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,914 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,914 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,914 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,914 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,914 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,915 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,915 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:54,978 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:54,978 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:54,978 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:54,979 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:54,979 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:54,979 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:54,980 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:54,980 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:54,980 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:55,041 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:55,041 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:55,041 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:55,041 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:55,041 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:55,041 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:55,041 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:55,042 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:55,042 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:55,101 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:55,101 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:55,101 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:55,101 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:55,101 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:55,101 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:55,102 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:55,102 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:55,102 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+
+2025-12-14 04:30:55,163 - scorer_debug - DEBUG - 
+=== SCORE CALCULATION START ===
+2025-12-14 04:30:55,163 - scorer_debug - DEBUG - Inputs: PERCLOS=0.0500, BPM=16.0, yawn=False, nod=False, texting=False, car_close=False
+2025-12-14 04:30:55,164 - scorer_debug - DEBUG - PERCLOS: input=0.0500, clamped=0.0500, raw=10.00, final=6.00 (weight=0.6)
+2025-12-14 04:30:55,164 - scorer_debug - DEBUG - BLINKS (triangular): bpm=16.0, target=16.0, deviation=0.0, tol=16.0, raw=50.00
+2025-12-14 04:30:55,164 - scorer_debug - DEBUG - BLINKS final: 20.00 (weight=0.4)
+2025-12-14 04:30:55,164 - scorer_debug - DEBUG - PENALTY window: 2 active, total=15.0, capped=15.0, new=[]
+2025-12-14 04:30:55,164 - scorer_debug - DEBUG - Score components: PERCLOS=6.00 + BLINKS=20.00 + PENALTIES=15.00 = 41.00
+2025-12-14 04:30:55,164 - scorer_debug - DEBUG - Final score: 41.00 (clamped from 41.00)
+2025-12-14 04:30:55,164 - scorer_debug - DEBUG - === SCORE CALCULATION END ===
+

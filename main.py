@@ -110,13 +110,13 @@ class DrowsinessMonitor:
         # Always draw face bounding box when face is detected
         face_detected = metrics.get('face_detected', False)
         face_bbox = metrics.get('face_bbox')
-        print(f"DISPLAY DEBUG: face_detected={face_detected}, face_bbox={face_bbox}")
+        # print(f"DISPLAY DEBUG: face_detected={face_detected}, face_bbox={face_bbox}")
         
         if face_detected:
             if face_bbox is not None:
                 try:
                     x, y, w, h = int(face_bbox[0]), int(face_bbox[1]), int(face_bbox[2]), int(face_bbox[3])
-                    print(f"DISPLAY DEBUG: Drawing bbox at ({x}, {y}, {w}, {h})")
+                    # print(f"DISPLAY DEBUG: Drawing bbox at ({x}, {y}, {w}, {h})")
                     # Green box for active tracking, blue for detection only
                     color = (0, 255, 0) if metrics.get('face_tracked', False) else (255, 0, 0)
                     thickness = 2 if metrics.get('face_tracked', False) else 1
