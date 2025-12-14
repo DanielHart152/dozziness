@@ -293,14 +293,13 @@ class FaceDetector:
                 self.init_face_tracker(frame, (x, y, w, h))
             
             roi_gray = gray[y:y+h, x:x+w]
+            # Try multiple detection parameters for better eye detection
             eyes = self.eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.1, minNeighbors=3, minSize=(10, 10))
+            if len(eyes) == 0:
+                # Try more sensitive detection
+                eyes = self.eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.05, minNeighbors=2, minSize=(8, 8))
             eye_count = len(eyes)
             print(f"DEBUG: OpenCV eye detection - found {eye_count} eyes in face region")
-            
-            # If no eyes detected, assume eyes are open (normal state)
-            if eye_count == 0:
-                eye_count = 2  # Assume 2 eyes visible
-                print("DEBUG: No eyes detected, assuming eyes are open")
             
             mock_landmarks = np.array([
                 [x + w//4, y + h//3], [x + w//2, y + h//3], [x + 3*w//4, y + h//3],
@@ -374,7 +373,7 @@ class FaceDetector:
             # print(f"DEBUG: Face bbox set: {face_bbox}")  # Debug output
         else:
             print(f"DEBUG: Face detected but no valid bbox. face_bbox={face_bbox}, face_data length={len(face_data) if face_data else 0}")
-        
+            
         # Check for face movement if tracking
         tracked_bbox = None
         if len(face_data) >= 3:
@@ -406,21 +405,28 @@ class FaceDetector:
             else:
                 face_rect, landmarks = face_data[0], face_data[1]
                 eye_count = 2
-            eyes_visible = eye_count >= 2
-            avg_ear = 0.3 if eyes_visible else 0.15
+            # Use actual eye detection results for real blink detection
+            if eye_count >= 2:
+                avg_ear = 0.3  # Eyes clearly visible = open
+            elif eye_count == 1:
+                avg_ear = 0.25  # One eye detected = borderline
+            else:
+                avg_ear = 0.2   # No eyes detected = likely closed/blinking
             result['left_ear'] = avg_ear
             result['right_ear'] = avg_ear
             result['avg_ear'] = avg_ear
             result['mar'] = 0.3
             result['head_pitch'] = 0.0
-            print(f"DEBUG: OpenCV mode - eye_count={eye_count}, eyes_visible={eyes_visible}, avg_ear={avg_ear}")
+            print(f"DEBUG: OpenCV mode - eye_count={eye_count}, avg_ear={avg_ear} ({'open' if avg_ear >= self.EYE_AR_THRESH else 'closed'})")
         
         eyes_closed = result['avg_ear'] < self.EYE_AR_THRESH
         result['eyes_closed'] = eyes_closed
         self.eye_state_history.append(eyes_closed)
         
-        # Debug eye detection
-        print(f"DEBUG: EAR={result['avg_ear']:.3f}, threshold={self.EYE_AR_THRESH}, closed={eyes_closed}, use_dlib={self.use_dlib}")
+        # Debug eye detection (only when state changes)
+        if not hasattr(self, '_last_eye_state') or self._last_eye_state != eyes_closed:
+            print(f"DEBUG: EYE STATE CHANGE - EAR={result['avg_ear']:.3f}, threshold={self.EYE_AR_THRESH}, closed={eyes_closed}")
+            self._last_eye_state = eyes_closed
         
         if eyes_closed:
             self.eye_closed_frames += 1

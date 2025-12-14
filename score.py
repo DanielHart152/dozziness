@@ -87,7 +87,10 @@ class RiskScorer:
         self._last_alert_on = -1e9
     
     def _perclos_points(self, perclos: float) -> float:
-        """Calculate PERCLOS contribution to score."""
+        """Calculate PERCLOS contribution to score.
+        Formula: (PERCLOS_c / 0.25) * 50 * 0.60
+        Example: PERCLOS = 0.20 → (0.20/0.25)*50*0.60 = 24
+        """
         # Cap PERCLOS, scale to 0..50, then apply weight
         perclos_c = clamp(perclos, 0.0, self.perclos_max)
         raw = (perclos_c / self.perclos_max) * 50.0
@@ -99,7 +102,11 @@ class RiskScorer:
         return final
     
     def _blink_points(self, bpm: float) -> float:
-        """Calculate blink rate contribution to score."""
+        """Calculate blink rate contribution to score.
+        Triangular: Target ≈ 16 bpm, tolerance = 16
+        Formula: 50 * (1 - abs(bpm - 16)/16) * 0.40
+        """
+        
         if self.blink_mode == 'triangular':
             # Triangular: optimal at target bpm, decreases linearly to 0 at target±tolerance
             target = self.blink_target
@@ -248,7 +255,7 @@ class RiskScorer:
             debug_logger.debug(f"Added ad-hoc score: {clamped_score:.2f}")
             while self._score_hist and (now - self._score_hist[0][0]) > 3.5:
                 self._score_hist.popleft()
-        
+
         # Calculate rolling averages
         if (now - self._last_debug_log) < self.debug_interval:
             debug_logger.debug(f"Calculating rolling averages...")
