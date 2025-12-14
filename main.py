@@ -110,7 +110,7 @@ class DrowsinessMonitor:
         # Always draw face bounding box when face is detected
         if metrics.get('face_detected', False):
             face_bbox = metrics.get('face_bbox')
-            if face_bbox is not None:
+            if face_bbox is not None and len(face_bbox) == 4:
                 x, y, w, h = face_bbox
                 # Green box for active tracking, blue for detection only
                 color = (0, 255, 0) if metrics.get('face_tracked', False) else (255, 0, 0)
@@ -124,6 +124,10 @@ class DrowsinessMonitor:
                 # Always draw center point
                 center_x, center_y = x + w//2, y + h//2
                 cv2.circle(frame, (center_x, center_y), 3, color, -1)
+            else:
+                # Fallback: draw a simple indicator if face detected but no bbox
+                cv2.putText(frame, "FACE DETECTED (NO BBOX)", (10, 50), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
         
         # Draw tracking line (movement trail)
         current_center = metrics.get('tracking_center')

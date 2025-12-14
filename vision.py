@@ -364,6 +364,9 @@ class FaceDetector:
                 lx, ly, lw, lh = self.last_face_position
                 result['last_center'] = (lx + lw//2, ly + lh//2)
             self.last_face_position = face_bbox
+            print(f"DEBUG: Face bbox set: {face_bbox}")  # Debug output
+        else:
+            print(f"DEBUG: Face detected but no valid bbox. face_bbox={face_bbox}, face_data length={len(face_data) if face_data else 0}")
         
         # Check for face movement if tracking
         tracked_bbox = None
