@@ -189,13 +189,43 @@ class FaceDetector:
     def init_face_tracker(self, frame: np.ndarray, bbox: Tuple[int, int, int, int]):
         """Initialize face tracker with detected face bounding box."""
         try:
-            # Try different trackers in order of preference
-            trackers = [
-                lambda: cv2.TrackerKCF_create(),
-                lambda: cv2.TrackerMOSSE_create(),
-                lambda: cv2.legacy.TrackerKCF_create() if hasattr(cv2, 'legacy') else None,
-                lambda: cv2.legacy.TrackerMOSSE_create() if hasattr(cv2, 'legacy') else None
-            ]
+            # Check OpenCV version and use appropriate tracker API
+            cv_version = cv2.__version__
+            print(f"🎯 TRACKING: OpenCV version {cv_version}")
+            
+            trackers = []
+            
+            # For OpenCV 4.5.1+, trackers are in cv2.legacy
+            if hasattr(cv2, 'legacy'):
+                try:
+                    # Try the most common working APIs
+                    if hasattr(cv2.legacy, 'TrackerKCF_create'):
+                        trackers.append(lambda: cv2.legacy.TrackerKCF_create())
+                        print(f"🎯 TRACKING: Added legacy.TrackerKCF_create")
+                    if hasattr(cv2.legacy, 'TrackerCSRT_create'):
+                        trackers.append(lambda: cv2.legacy.TrackerCSRT_create())
+                        print(f"🎯 TRACKING: Added legacy.TrackerCSRT_create")
+                    if hasattr(cv2.legacy, 'TrackerMOSSE_create'):
+                        trackers.append(lambda: cv2.legacy.TrackerMOSSE_create())
+                        print(f"🎯 TRACKING: Added legacy.TrackerMOSSE_create")
+                except Exception as e:
+                    print(f"🎯 TRACKING: Legacy tracker error: {e}")
+            
+            # For older OpenCV versions
+            if hasattr(cv2, 'TrackerKCF_create'):
+                trackers.append(lambda: cv2.TrackerKCF_create())
+                print(f"🎯 TRACKING: Added TrackerKCF_create")
+            if hasattr(cv2, 'TrackerCSRT_create'):
+                trackers.append(lambda: cv2.TrackerCSRT_create())
+                print(f"🎯 TRACKING: Added TrackerCSRT_create")
+            
+            print(f"🎯 TRACKING: Found {len(trackers)} tracker types to try")
+            
+            if len(trackers) == 0:
+                print(f"🎯 TRACKING: No trackers available in OpenCV {cv_version}")
+                print(f"🎯 TRACKING: Available cv2 attributes: {[attr for attr in dir(cv2) if 'Track' in attr]}")
+                if hasattr(cv2, 'legacy'):
+                    print(f"🎯 TRACKING: Available cv2.legacy attributes: {[attr for attr in dir(cv2.legacy) if 'Track' in attr]}")
             
             for tracker_func in trackers:
                 try:
@@ -203,45 +233,60 @@ class FaceDetector:
                         continue
                     self.face_tracker = tracker_func()
                     if self.face_tracker is not None:
+                        print(f"🎯 TRACKING: Trying to init tracker with bbox {bbox}")
                         success = self.face_tracker.init(frame, bbox)
+                        print(f"🎯 TRACKING: Tracker init returned: {success}")
                         if success:
                             self.tracking_active = True
                             self.last_face_position = bbox
                             self.face_lost_frames = 0
-                            print(f"DEBUG: Face tracker initialized successfully at {bbox}")
+                            print(f"🎯 TRACKING: ✅ Face tracker initialized successfully at {bbox}")
                             return True
+                        else:
+                            print(f"🎯 TRACKING: ❌ Tracker init failed for this tracker type")
                 except Exception as e:
-                    print(f"DEBUG: Tracker failed: {e}")
+                    print(f"🎯 TRACKING: Tracker failed: {e}")
                     continue
             
-            # If all trackers fail, disable tracking but continue with detection
+            # If no trackers available or all fail, provide helpful info
+            print("🎯 TRACKING: ❌ No working OpenCV trackers found")
+            print(f"🎯 TRACKING: Your OpenCV version: {cv2.__version__}")
+            print("🎯 TRACKING: Try: pip install opencv-contrib-python")
             self.tracking_active = False
             self.face_tracker = None
-            print("DEBUG: All face trackers failed to initialize")
             return False
         except Exception as e:
             self.tracking_active = False
             self.face_tracker = None
-            print(f"DEBUG: Face tracker initialization error: {e}")
+            print(f"🎯 TRACKING: ❌ Face tracker initialization error: {e}")
             return False
     
     def update_face_tracker(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
         """Update face tracker and return tracked bounding box."""
-        if not self.tracking_active or self.face_tracker is None:
+        if not self.tracking_active:
             return None
         
-        success, bbox = self.face_tracker.update(frame)
-        if success:
-            bbox = tuple(map(int, bbox))
-            self.last_face_position = bbox
-            self.face_lost_frames = 0
-            return bbox
-        else:
-            self.face_lost_frames += 1
-            if self.face_lost_frames > self.max_face_lost_frames:
-                self.tracking_active = False
-                self.face_tracker = None
+        # Simple tracking fallback - just return current position
+        # (position gets updated by detection in detect_face)
+        if self.face_tracker == "simple":
             return self.last_face_position
+        
+        # OpenCV tracker
+        if self.face_tracker is not None:
+            success, bbox = self.face_tracker.update(frame)
+            if success:
+                bbox = tuple(map(int, bbox))
+                self.last_face_position = bbox
+                self.face_lost_frames = 0
+                return bbox
+            else:
+                self.face_lost_frames += 1
+                if self.face_lost_frames > self.max_face_lost_frames:
+                    self.tracking_active = False
+                    self.face_tracker = None
+                    print(f"🎯 TRACKING: ❌ Tracker deactivated due to too many lost frames")
+        
+        return self.last_face_position
     
     def detect_face_movement(self, current_pos: Tuple[int, int, int, int]) -> bool:
         """Detect significant face movement."""
@@ -263,26 +308,8 @@ class FaceDetector:
     
     def detect_face(self, frame: np.ndarray) -> Optional[Tuple]:
         """Detect face and landmarks in frame with tracking support."""
-        # Try tracking first if active
-        if self.tracking_active:
-            tracked_bbox = self.update_face_tracker(frame)
-            if tracked_bbox is not None:
-                # Use tracked position for landmark detection
-                if self.use_dlib and self.predictor is not None:
-                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if len(frame.shape) == 3 else frame
-                    x, y, w, h = tracked_bbox
-                    face_rect = dlib.rectangle(x, y, x + w, y + h)
-                    landmarks = self.predictor(gray, face_rect)
-                    landmarks_array = np.array([[p.x, p.y] for p in landmarks.parts()])
-                    return (face_rect, landmarks_array, bbox, tracked_bbox)
-                else:
-                    # OpenCV fallback with tracking
-                    x, y, w, h = tracked_bbox
-                    mock_landmarks = np.array([
-                        [x + w//4, y + h//3], [x + w//2, y + h//3], [x + 3*w//4, y + h//3],
-                        [x + w//2, y + h//2], [x + w//2, y + 4*h//5], [x + w//2, y + h//4],
-                    ])
-                    return ((x, y, w, h), mock_landmarks, 2, tracked_bbox)
+        # Always do fresh detection first, then use tracking for consistency
+        # This ensures we get accurate face positions
         
         # Fall back to detection if tracking failed or not active
         if not self.use_dlib:
@@ -292,9 +319,27 @@ class FaceDetector:
                 return None
             x, y, w, h = faces[0]
             
-            # Initialize tracker with detected face (only try once per detection)
-            if not self.tracking_active and self.face_tracker is None:
-                self.init_face_tracker(frame, (x, y, w, h))
+            # Initialize tracker with detected face
+            if not hasattr(self, '_opencv_debug_count'):
+                self._opencv_debug_count = 0
+            self._opencv_debug_count += 1
+            
+            if self._opencv_debug_count % 30 == 0:
+                print(f"🎯 TRACKING: OpenCV face detected at ({x}, {y}, {w}, {h}), tracking_active={self.tracking_active}")
+            
+            # Only try to initialize tracking occasionally
+            if not self.tracking_active and self._opencv_debug_count % 10 == 0:
+                if self._opencv_debug_count % 30 == 0:
+                    print(f"🎯 TRACKING: Attempting to initialize OpenCV tracker...")
+                success = self.init_face_tracker(frame, (x, y, w, h))
+                if success:
+                    print(f"🎯 TRACKING: ✅ OpenCV tracker initialized successfully")
+                elif self._opencv_debug_count % 30 == 0:
+                    print(f"🎯 TRACKING: ❌ OpenCV tracker init failed")
+            
+            if self.tracking_active:
+                # Update tracker position with current detection
+                self.last_face_position = (x, y, w, h)
             
             roi_gray = gray[y:y+h, x:x+w]
             # Try multiple detection parameters for better eye detection
@@ -321,15 +366,35 @@ class FaceDetector:
         
         face_rect = faces[0]
         
-        # Initialize tracker with detected face (only try once per detection)
-        bbox = (face_rect.left(), face_rect.top(), 
-               face_rect.width(), face_rect.height())
-        if not self.tracking_active and self.face_tracker is None:
-            self.init_face_tracker(frame, bbox)
+        # Initialize tracker with detected face
+        detection_bbox = (face_rect.left(), face_rect.top(), 
+                         face_rect.width(), face_rect.height())
+        
+        # Only print debug occasionally to reduce spam
+        if not hasattr(self, '_dlib_debug_count'):
+            self._dlib_debug_count = 0
+        self._dlib_debug_count += 1
+        
+        if self._dlib_debug_count % 30 == 0:
+            print(f"🎯 TRACKING: dlib face detected at {detection_bbox}, tracking_active={self.tracking_active}")
+        
+        # Only try to initialize tracking occasionally to avoid spam
+        if not self.tracking_active and self._dlib_debug_count % 10 == 0:
+            if self._dlib_debug_count % 30 == 0:
+                print(f"🎯 TRACKING: Attempting to initialize tracker...")
+            success = self.init_face_tracker(frame, detection_bbox)
+            if success:
+                print(f"🎯 TRACKING: ✅ Tracker initialized successfully")
+            elif self._dlib_debug_count % 30 == 0:
+                print(f"🎯 TRACKING: ❌ Tracker init failed")
+        
+        if self.tracking_active:
+            # Update tracker position with current detection
+            self.last_face_position = detection_bbox
         
         landmarks = self.predictor(gray, face_rect)
         landmarks_array = np.array([[p.x, p.y] for p in landmarks.parts()])
-        return (face_rect, landmarks_array, bbox, bbox)  # Add bbox as 4th element for consistency
+        return (face_rect, landmarks_array, detection_bbox, detection_bbox)
     
     def process_frame(self, frame: np.ndarray) -> Dict:
         """Process frame for drowsiness indicators."""
@@ -345,16 +410,24 @@ class FaceDetector:
         
         face_data = self.detect_face(frame)
         if face_data is None:
+            # No face detected - turn off tracking
+            if self.tracking_active:
+                print("🎯 TRACKING: ❌ Face lost, deactivating tracking")
+                self.tracking_active = False
+                self.face_tracker = None
             self.eye_state_history.append(False)
             return result
         
         result['face_detected'] = True
         result['face_tracked'] = self.tracking_active
         
-        # Debug tracking status
-        if not hasattr(self, '_last_tracking_state') or self._last_tracking_state != self.tracking_active:
-            print(f"DEBUG: Tracking state changed to: {self.tracking_active}")
-            self._last_tracking_state = self.tracking_active
+        # Debug tracking status every few frames
+        if not hasattr(self, '_debug_frame_count'):
+            self._debug_frame_count = 0
+        self._debug_frame_count += 1
+        
+        if self._debug_frame_count % 30 == 0:  # Every 30 frames
+            print(f"🎯 TRACKING STATUS: active={self.tracking_active}, tracker_exists={self.face_tracker is not None}")
         
         # Extract face bounding box for display (always show when face detected)
         face_bbox = None
