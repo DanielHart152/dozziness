@@ -126,6 +126,14 @@ class FaceDetector:
         self.nod_frames = 0
         self.nod_detected = False
         
+        # Face tracking
+        self.face_tracker = None
+        self.last_face_position = None
+        self.face_lost_frames = 0
+        self.tracking_active = False
+        self.face_movement_threshold = config['detection'].get('face_movement_threshold', 50)
+        self.max_face_lost_frames = config['detection'].get('max_face_lost_frames', 10)
+        
         # Face landmarks indices (68-point model)
         self.LEFT_EYE_POINTS = list(range(36, 42))
         self.RIGHT_EYE_POINTS = list(range(42, 48))
@@ -178,14 +186,87 @@ class FaceDetector:
         else:
             return -angle
     
+    def init_face_tracker(self, frame: np.ndarray, bbox: Tuple[int, int, int, int]):
+        """Initialize face tracker with detected face bounding box."""
+        self.face_tracker = cv2.TrackerCSRT_create()
+        success = self.face_tracker.init(frame, bbox)
+        if success:
+            self.tracking_active = True
+            self.last_face_position = bbox
+            self.face_lost_frames = 0
+        return success
+    
+    def update_face_tracker(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
+        """Update face tracker and return tracked bounding box."""
+        if not self.tracking_active or self.face_tracker is None:
+            return None
+        
+        success, bbox = self.face_tracker.update(frame)
+        if success:
+            bbox = tuple(map(int, bbox))
+            self.last_face_position = bbox
+            self.face_lost_frames = 0
+            return bbox
+        else:
+            self.face_lost_frames += 1
+            if self.face_lost_frames > self.max_face_lost_frames:
+                self.tracking_active = False
+                self.face_tracker = None
+            return self.last_face_position
+    
+    def detect_face_movement(self, current_pos: Tuple[int, int, int, int]) -> bool:
+        """Detect significant face movement."""
+        if self.last_face_position is None:
+            return False
+        
+        last_x, last_y, last_w, last_h = self.last_face_position
+        curr_x, curr_y, curr_w, curr_h = current_pos
+        
+        # Calculate center points
+        last_center = (last_x + last_w//2, last_y + last_h//2)
+        curr_center = (curr_x + curr_w//2, curr_y + curr_h//2)
+        
+        # Calculate movement distance
+        movement = np.sqrt((curr_center[0] - last_center[0])**2 + 
+                          (curr_center[1] - last_center[1])**2)
+        
+        return movement > self.face_movement_threshold
+    
     def detect_face(self, frame: np.ndarray) -> Optional[Tuple]:
-        """Detect face and landmarks in frame."""
+        """Detect face and landmarks in frame with tracking support."""
+        # Try tracking first if active
+        if self.tracking_active:
+            tracked_bbox = self.update_face_tracker(frame)
+            if tracked_bbox is not None:
+                # Use tracked position for landmark detection
+                if self.use_dlib and self.predictor is not None:
+                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if len(frame.shape) == 3 else frame
+                    x, y, w, h = tracked_bbox
+                    face_rect = dlib.rectangle(x, y, x + w, y + h)
+                    landmarks = self.predictor(gray, face_rect)
+                    landmarks_array = np.array([[p.x, p.y] for p in landmarks.parts()])
+                    return (face_rect, landmarks_array, tracked_bbox)
+                else:
+                    # OpenCV fallback with tracking
+                    x, y, w, h = tracked_bbox
+                    mock_landmarks = np.array([
+                        [x + w//4, y + h//3], [x + w//2, y + h//3], [x + 3*w//4, y + h//3],
+                        [x + w//2, y + h//2], [x + w//2, y + 4*h//5], [x + w//2, y + h//4],
+                    ])
+                    return ((x, y, w, h), mock_landmarks, 2, tracked_bbox)
+        
+        # Fall back to detection if tracking failed or not active
         if not self.use_dlib:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if len(frame.shape) == 3 else frame
             faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
             if len(faces) == 0:
                 return None
             x, y, w, h = faces[0]
+            
+            # Initialize tracker with detected face
+            if not self.tracking_active:
+                self.init_face_tracker(frame, (x, y, w, h))
+            
             roi_gray = gray[y:y+h, x:x+w]
             eyes = self.eye_cascade.detectMultiScale(roi_gray)
             eye_count = len(eyes)
@@ -202,7 +283,15 @@ class FaceDetector:
         faces = self.detector(gray)
         if len(faces) == 0:
             return None
+        
         face_rect = faces[0]
+        
+        # Initialize tracker with detected face
+        if not self.tracking_active:
+            bbox = (face_rect.left(), face_rect.top(), 
+                   face_rect.width(), face_rect.height())
+            self.init_face_tracker(frame, bbox)
+        
         landmarks = self.predictor(gray, face_rect)
         landmarks_array = np.array([[p.x, p.y] for p in landmarks.parts()])
         return (face_rect, landmarks_array)
@@ -214,7 +303,8 @@ class FaceDetector:
         result = {
             'face_detected': False, 'left_ear': 0.0, 'right_ear': 0.0, 'avg_ear': 0.0,
             'mar': 0.0, 'head_pitch': 0.0, 'eyes_closed': False,
-            'blink_detected': False, 'yawn_detected': False, 'nod_detected': False
+            'blink_detected': False, 'yawn_detected': False, 'nod_detected': False,
+            'face_tracked': self.tracking_active, 'face_movement_detected': False
         }
         
         face_data = self.detect_face(frame)
@@ -223,6 +313,13 @@ class FaceDetector:
             return result
         
         result['face_detected'] = True
+        result['face_tracked'] = self.tracking_active
+        
+        # Check for face movement if tracking
+        if len(face_data) > 2 and face_data[-1] is not None:
+            tracked_bbox = face_data[-1]
+            if isinstance(tracked_bbox, tuple) and len(tracked_bbox) == 4:
+                result['face_movement_detected'] = self.detect_face_movement(tracked_bbox)
         
         if self.use_dlib and len(face_data) == 2:
             face_rect, landmarks = face_data
@@ -320,6 +417,11 @@ class FaceDetector:
         self.yawn_detected = False
         self.nod_frames = 0
         self.nod_detected = False
+        # Reset face tracking
+        self.face_tracker = None
+        self.last_face_position = None
+        self.face_lost_frames = 0
+        self.tracking_active = False
 
 
 class RoadDetector:

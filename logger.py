@@ -26,7 +26,7 @@ class DataLogger:
             writer.writerow([
                 'timestamp', 'perclos', 'blinks_per_min', 'risk_score', 'alert_triggered',
                 'yawn_detected', 'nod_detected', 'texting_detected', 'car_close',
-                'left_ear', 'right_ear', 'mar', 'head_pitch'
+                'left_ear', 'right_ear', 'mar', 'head_pitch', 'face_tracked', 'face_movement_detected'
             ])
     
     def log(self, metrics: Dict, force: bool = False):
@@ -44,7 +44,8 @@ class DataLogger:
             metrics.get('yawn_detected', False), metrics.get('nod_detected', False),
             metrics.get('texting_detected', False), metrics.get('car_close', False),
             metrics.get('left_ear', 0.0), metrics.get('right_ear', 0.0),
-            metrics.get('mar', 0.0), metrics.get('head_pitch', 0.0)
+            metrics.get('mar', 0.0), metrics.get('head_pitch', 0.0),
+            metrics.get('face_tracked', False), metrics.get('face_movement_detected', False)
         ]
         
         try:

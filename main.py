@@ -152,6 +152,22 @@ class DrowsinessMonitor:
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, face_color, 1)
         y_offset += line_height
         
+        # Face tracking status
+        if metrics.get('face_tracked', False):
+            track_color = (0, 255, 255)  # Yellow for tracking
+            cv2.putText(frame, "Tracking: ON", (hud_x + 5, hud_y + y_offset),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.4, track_color, 1)
+        else:
+            cv2.putText(frame, "Tracking: OFF", (hud_x + 5, hud_y + y_offset),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.4, (128, 128, 128), 1)
+        y_offset += line_height
+        
+        # Face movement detection
+        if metrics.get('face_movement_detected', False):
+            cv2.putText(frame, "FACE MOVEMENT!", (hud_x + 5, hud_y + y_offset),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 165, 0), 2)
+            y_offset += line_height
+        
         if metrics.get('yawn_detected', False):
             cv2.putText(frame, "YAWN DETECTED!", (hud_x + 5, hud_y + y_offset),
                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
@@ -290,7 +306,8 @@ class DrowsinessMonitor:
             'nod_detected': driver_result.get('nod_detected', False), 'texting_detected': texting_detected,
             'car_close': car_close, 'left_ear': driver_result.get('left_ear', 0.0),
             'right_ear': driver_result.get('right_ear', 0.0), 'mar': driver_result.get('mar', 0.0),
-            'head_pitch': driver_result.get('head_pitch', 0.0), 'face_detected': driver_result.get('face_detected', False)
+            'head_pitch': driver_result.get('head_pitch', 0.0), 'face_detected': driver_result.get('face_detected', False),
+            'face_tracked': driver_result.get('face_tracked', False), 'face_movement_detected': driver_result.get('face_movement_detected', False)
         }
         
         return metrics

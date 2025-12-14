@@ -17,7 +17,9 @@
     "head_pitch_threshold": 15.0,
     "nod_consec_frames": 5,
     "perclos_window_seconds": 45,
-    "blink_window_seconds": 60
+    "blink_window_seconds": 60,
+    "face_movement_threshold": 50,
+    "max_face_lost_frames": 10
   },
   "scoring": {
     "perclos_weight": 0.6,
