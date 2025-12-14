@@ -108,11 +108,11 @@ class RiskScorer:
         """
         
         if self.blink_mode == 'triangular':
-            # Triangular: optimal at target bpm, decreases linearly to 0 at target±tolerance
+            # Triangular: optimal at target bpm gives LOW risk, deviation increases risk
             target = self.blink_target
             tol = max(1e-6, self.blink_tolerance)
             deviation = abs(bpm - target)
-            raw = 50.0 * (1.0 - deviation / tol)
+            raw = 50.0 * (deviation / tol)  # FIXED: Higher deviation = higher risk
             raw = clamp(raw, 0.0, 50.0)
             if (time.time() - self._last_debug_log) < self.debug_interval:
                 debug_logger.debug(f"BLINKS (triangular): bpm={bpm:.1f}, target={target}, "
