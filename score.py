@@ -93,7 +93,7 @@ class RiskScorer:
         """
         # Cap PERCLOS, scale to 0..50, then apply weight
         perclos_c = clamp(perclos, 0.0, self.perclos_max)
-        raw = (perclos_c / self.perclos_max) * 80.0
+        raw = (perclos_c / self.perclos_max) * 100.0
         final = raw * self.perclos_weight
         
         if (time.time() - self._last_debug_log) < self.debug_interval:
@@ -112,8 +112,8 @@ class RiskScorer:
             target = self.blink_target
             tol = max(1e-6, self.blink_tolerance)
             deviation = abs(bpm - target)
-            raw = 80.0 * (deviation / tol)  # FIXED: Higher deviation = higher risk
-            raw = clamp(raw, 0.0, 80.0)
+            raw = 100.0 * (deviation / tol)  # FIXED: Higher deviation = higher risk
+            raw = clamp(raw, 0.0, 100.0)
             if (time.time() - self._last_debug_log) < self.debug_interval:
                 debug_logger.debug(f"BLINKS (triangular): bpm={bpm:.1f}, target={target}, "
                                   f"deviation={deviation:.1f}, tol={tol}, raw={raw:.2f}")
