@@ -163,95 +163,101 @@ class DrowsinessMonitor:
         h, w = frame.shape[:2]
         overlay = frame.copy()
         
-        hud_x = 10
-        hud_y = 10
-        hud_w = 280
-        hud_h = 245
+        # Position HUD in top-left corner with larger size for bigger display
+        hud_x = 5
+        hud_y = 5
+        hud_w = 350
+        hud_h = 280
         
         cv2.rectangle(overlay, (hud_x, hud_y), (hud_x + hud_w, hud_y + hud_h), (0, 0, 0), -1)
         cv2.addWeighted(overlay, 0.7, frame, 0.3, 0, frame)
         
-        y_offset = 30
-        line_height = 25
+        y_offset = 25
+        line_height = 30
         
+        # Title with larger font
         cv2.putText(frame, "DROWSINESS MONITOR", (hud_x + 5, hud_y + y_offset),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-        y_offset += line_height
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+        y_offset += line_height + 5
         
+        # Risk Score - most prominent display
         score = metrics.get('risk_score', 0.0)
         score_color = (0, 255, 0) if score < 50 else (0, 165, 255) if score < 75 else (0, 0, 255)
         cv2.putText(frame, f"Risk Score: {score:.1f}", (hud_x + 5, hud_y + y_offset),
-                   cv2.FONT_HERSHEY_SIMPLEX, self.font_scale, score_color, self.font_thickness)
-        y_offset += line_height
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.8, score_color, 3)
+        y_offset += line_height + 5
         
+        # PERCLOS with larger font
         perclos = metrics.get('perclos', 0.0)
         cv2.putText(frame, f"PERCLOS: {perclos:.3f}", (hud_x + 5, hud_y + y_offset),
-                   cv2.FONT_HERSHEY_SIMPLEX, self.font_scale, (255, 255, 255), self.font_thickness)
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
         y_offset += line_height
         
+        # Blinks per minute with larger font
         bpm = metrics.get('blinks_per_min', 0.0)
         cv2.putText(frame, f"Blinks/min: {bpm:.1f}", (hud_x + 5, hud_y + y_offset),
-                   cv2.FONT_HERSHEY_SIMPLEX, self.font_scale, (255, 255, 255), self.font_thickness)
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
         y_offset += line_height
         
         # Speed display (placeholder for future sensor integration)
         cv2.putText(frame, "Speed: 0 km/h (No sensor)", (hud_x + 5, hud_y + y_offset),
-                   cv2.FONT_HERSHEY_SIMPLEX, self.font_scale, (128, 128, 128), self.font_thickness)
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 128, 128), 1)
         y_offset += line_height
         
+        # Face detection status with larger font
         face_status = "Face: YES" if metrics.get('face_detected', False) else "Face: NO"
         face_color = (0, 255, 0) if metrics.get('face_detected', False) else (0, 0, 255)
         cv2.putText(frame, face_status, (hud_x + 5, hud_y + y_offset),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, face_color, 1)
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, face_color, 2)
         y_offset += line_height
         
         # Face tracking status
         if metrics.get('face_tracked', False):
             track_color = (0, 255, 255)  # Yellow for tracking
             cv2.putText(frame, "Tracking: ON", (hud_x + 5, hud_y + y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.4, track_color, 1)
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, track_color, 1)
         else:
             cv2.putText(frame, "Tracking: OFF", (hud_x + 5, hud_y + y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.4, (128, 128, 128), 1)
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 128, 128), 1)
         y_offset += line_height
         
         # Face movement detection
         if metrics.get('face_movement_detected', False):
             cv2.putText(frame, "FACE MOVEMENT!", (hud_x + 5, hud_y + y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 165, 0), 2)
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 165, 0), 2)
             y_offset += line_height
         
         if metrics.get('yawn_detected', False):
             cv2.putText(frame, "YAWN DETECTED!", (hud_x + 5, hud_y + y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
             y_offset += line_height
         
         if metrics.get('nod_detected', False):
             cv2.putText(frame, "HEAD NOD!", (hud_x + 5, hud_y + y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
             y_offset += line_height
         
         if metrics.get('texting_detected', False):
             cv2.putText(frame, "TEXTING DETECTED!", (hud_x + 5, hud_y + y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
             y_offset += line_height
         
         if metrics.get('car_close', False):
             cv2.putText(frame, "CAR CLOSE!", (hud_x + 5, hud_y + y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 0), 2)
             y_offset += line_height
         
         if metrics.get('alert_triggered', False):
             cv2.putText(frame, "*** ALERT ***", (hud_x + 5, hud_y + y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 255), 2)
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 3)
         
         if self.alert_manager.is_muted:
             mute_remaining = max(0, int(self.alert_manager.mute_until - time.time()))
-            cv2.putText(frame, f"MUTED: {mute_remaining}s", (hud_x + 5, hud_y + hud_h - 10),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.4, (128, 128, 128), 1)
+            cv2.putText(frame, f"MUTED: {mute_remaining}s", (hud_x + 5, hud_y + hud_h - 15),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (128, 128, 128), 1)
         
-        cv2.putText(frame, "Press 'q' to quit, 'm' to mute", (hud_x + 5, hud_y + hud_h + 20),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (200, 200, 200), 1)
+        cv2.putText(frame, "Press 'q' to quit, 'm' to mute", (hud_x + 5, hud_y + hud_h + 25),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 200, 200), 1)
         
         return frame
     
