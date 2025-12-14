@@ -314,7 +314,7 @@ class FaceDetector:
         # Fall back to detection if tracking failed or not active
         if not self.use_dlib:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if len(frame.shape) == 3 else frame
-            faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
+            faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30), maxSize=(300, 300))
             if len(faces) == 0:
                 return None
             x, y, w, h = faces[0]
@@ -343,10 +343,10 @@ class FaceDetector:
             
             roi_gray = gray[y:y+h, x:x+w]
             # Try multiple detection parameters for better eye detection
-            eyes = self.eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.1, minNeighbors=3, minSize=(10, 10))
+            eyes = self.eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.05, minNeighbors=2, minSize=(8, 8), maxSize=(50, 50))
             if len(eyes) == 0:
-                # Try more sensitive detection
-                eyes = self.eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.05, minNeighbors=2, minSize=(8, 8))
+                # Try even more sensitive detection
+                eyes = self.eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.02, minNeighbors=1, minSize=(6, 6), maxSize=(60, 60))
             eye_count = len(eyes)
             print(f"DEBUG: OpenCV eye detection - found {eye_count} eyes in face region")
             
