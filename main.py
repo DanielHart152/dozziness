@@ -360,7 +360,8 @@ class DrowsinessMonitor:
             'car_close': car_close, 'left_ear': driver_result.get('left_ear', 0.0),
             'right_ear': driver_result.get('right_ear', 0.0), 'mar': driver_result.get('mar', 0.0),
             'head_pitch': driver_result.get('head_pitch', 0.0), 'face_detected': driver_result.get('face_detected', False),
-            'face_tracked': driver_result.get('face_tracked', False), 'face_movement_detected': driver_result.get('face_movement_detected', False)
+            'face_tracked': driver_result.get('face_tracked', False), 'face_movement_detected': driver_result.get('face_movement_detected', False),
+            'face_bbox': driver_result.get('face_bbox'), 'tracking_center': driver_result.get('tracking_center'), 'last_center': driver_result.get('last_center')
         }
         
         return metrics
