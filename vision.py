@@ -27,6 +27,8 @@ class FaceDetector:
         """
         self.config = config
         self.use_dlib = DLIB_AVAILABLE
+        self.dlib_tracker = None
+        self.dlib_tracking_active = False
         
         if self.use_dlib:
             self.detector = dlib.get_frontal_face_detector()
@@ -39,10 +41,12 @@ class FaceDetector:
             try:
                 if os.path.exists(predictor_path):
                     self.predictor = dlib.shape_predictor(predictor_path)
+                    print("✅ dlib initialized with shape predictor for face detection and tracking")
                 else:
                     raise FileNotFoundError("Shape predictor not found")
             except:
                 print("Warning: shape_predictor_68_face_landmarks.dat not found.")
+                print("Download: wget http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2")
                 print("Falling back to OpenCV Haar cascades.")
                 self.use_dlib = False
         
@@ -82,15 +86,30 @@ class FaceDetector:
                     "Try: sudo apt install opencv-data"
                 )
             
-            face_cascade_file = os.path.join(cascade_path, 'haarcascade_frontalface_default.xml')
-            eye_cascade_file = os.path.join(cascade_path, 'haarcascade_eye.xml')
+            # Load multiple cascade files for better detection
+            cascade_files = {
+                'frontal': 'haarcascade_frontalface_default.xml',
+                'profile': 'haarcascade_profileface.xml',
+                'alt': 'haarcascade_frontalface_alt.xml',
+                'alt2': 'haarcascade_frontalface_alt2.xml'
+            }
             
-            if not os.path.exists(face_cascade_file):
-                raise FileNotFoundError(f"Face cascade not found: {face_cascade_file}")
+            self.face_cascades = {}
+            for name, filename in cascade_files.items():
+                filepath = os.path.join(cascade_path, filename)
+                if os.path.exists(filepath):
+                    cascade = cv2.CascadeClassifier(filepath)
+                    if not cascade.empty():
+                        self.face_cascades[name] = cascade
+                        print(f"Loaded {name} cascade: {filename}")
+            
+            if not self.face_cascades:
+                raise FileNotFoundError(f"No face cascades found in: {cascade_path}")
+            
+            eye_cascade_file = os.path.join(cascade_path, 'haarcascade_eye.xml')
             if not os.path.exists(eye_cascade_file):
                 raise FileNotFoundError(f"Eye cascade not found: {eye_cascade_file}")
             
-            self.face_cascade = cv2.CascadeClassifier(face_cascade_file)
             self.eye_cascade = cv2.CascadeClassifier(eye_cascade_file)
             self.predictor = None
             self.detector = None
@@ -189,7 +208,21 @@ class FaceDetector:
     def init_face_tracker(self, frame: np.ndarray, bbox: Tuple[int, int, int, int]):
         """Initialize face tracker with detected face bounding box."""
         try:
-            # Check OpenCV version and use appropriate tracker API
+            # Prefer dlib correlation tracker if available
+            if self.use_dlib and hasattr(dlib, 'correlation_tracker'):
+                self.dlib_tracker = dlib.correlation_tracker()
+                gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if len(frame.shape) == 3 else frame
+                x, y, w, h = bbox
+                rect = dlib.rectangle(x, y, x + w, y + h)
+                self.dlib_tracker.start_track(gray, rect)
+                self.dlib_tracking_active = True
+                self.tracking_active = True
+                self.last_face_position = bbox
+                self.face_lost_frames = 0
+                print(f"🎯 TRACKING: ✅ dlib correlation tracker initialized at {bbox}")
+                return True
+            
+            # Fallback to OpenCV trackers
             cv_version = cv2.__version__
             print(f"🎯 TRACKING: OpenCV version {cv_version}")
             
@@ -266,12 +299,30 @@ class FaceDetector:
         if not self.tracking_active:
             return None
         
+        # dlib correlation tracker (preferred)
+        if self.dlib_tracking_active and self.dlib_tracker is not None:
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if len(frame.shape) == 3 else frame
+            confidence = self.dlib_tracker.update(gray)
+            if confidence > 7.0:  # Good tracking confidence
+                pos = self.dlib_tracker.get_position()
+                bbox = (int(pos.left()), int(pos.top()), int(pos.width()), int(pos.height()))
+                self.last_face_position = bbox
+                self.face_lost_frames = 0
+                return bbox
+            else:
+                self.face_lost_frames += 1
+                if self.face_lost_frames > self.max_face_lost_frames:
+                    self.dlib_tracking_active = False
+                    self.tracking_active = False
+                    self.dlib_tracker = None
+                    print(f"🎯 TRACKING: ❌ dlib tracker deactivated (confidence={confidence:.1f})")
+        
         # Simple tracking fallback - just return current position
         # (position gets updated by detection in detect_face)
         if self.face_tracker == "simple":
             return self.last_face_position
         
-        # OpenCV tracker
+        # OpenCV tracker fallback
         if self.face_tracker is not None:
             success, bbox = self.face_tracker.update(frame)
             if success:
@@ -284,7 +335,7 @@ class FaceDetector:
                 if self.face_lost_frames > self.max_face_lost_frames:
                     self.tracking_active = False
                     self.face_tracker = None
-                    print(f"🎯 TRACKING: ❌ Tracker deactivated due to too many lost frames")
+                    print(f"🎯 TRACKING: ❌ OpenCV tracker deactivated due to too many lost frames")
         
         return self.last_face_position
     
@@ -314,7 +365,15 @@ class FaceDetector:
         # Fall back to detection if tracking failed or not active
         if not self.use_dlib:
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if len(frame.shape) == 3 else frame
-            faces = self.face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30), maxSize=(300, 300))
+            
+            # Try multiple cascades for better detection
+            faces = []
+            for name, cascade in self.face_cascades.items():
+                detected = cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=3, minSize=(30, 30), maxSize=(300, 300))
+                if len(detected) > 0:
+                    faces.extend(detected)
+                    break  # Use first successful detection
+            
             if len(faces) == 0:
                 return None
             x, y, w, h = faces[0]
@@ -577,6 +636,8 @@ class FaceDetector:
         self.nod_detected = False
         # Reset face tracking
         self.face_tracker = None
+        self.dlib_tracker = None
+        self.dlib_tracking_active = False
         self.last_face_position = None
         self.face_lost_frames = 0
         self.tracking_active = False
