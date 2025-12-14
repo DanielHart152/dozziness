@@ -110,20 +110,25 @@ class DrowsinessMonitor:
         # Always draw face bounding box when face is detected
         if metrics.get('face_detected', False):
             face_bbox = metrics.get('face_bbox')
-            if face_bbox is not None and len(face_bbox) == 4:
-                x, y, w, h = face_bbox
-                # Green box for active tracking, blue for detection only
-                color = (0, 255, 0) if metrics.get('face_tracked', False) else (255, 0, 0)
-                thickness = 2 if metrics.get('face_tracked', False) else 1
-                cv2.rectangle(frame, (x, y), (x + w, y + h), color, thickness)
-                
-                # Add label
-                label = "TRACKING" if metrics.get('face_tracked', False) else "DETECTED"
-                cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
-                
-                # Always draw center point
-                center_x, center_y = x + w//2, y + h//2
-                cv2.circle(frame, (center_x, center_y), 3, color, -1)
+            if face_bbox is not None:
+                try:
+                    x, y, w, h = int(face_bbox[0]), int(face_bbox[1]), int(face_bbox[2]), int(face_bbox[3])
+                    # Green box for active tracking, blue for detection only
+                    color = (0, 255, 0) if metrics.get('face_tracked', False) else (255, 0, 0)
+                    thickness = 2 if metrics.get('face_tracked', False) else 1
+                    cv2.rectangle(frame, (x, y), (x + w, y + h), color, thickness)
+                    
+                    # Add label
+                    label = "TRACKING" if metrics.get('face_tracked', False) else "DETECTED"
+                    cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+                    
+                    # Always draw center point
+                    center_x, center_y = x + w//2, y + h//2
+                    cv2.circle(frame, (center_x, center_y), 3, color, -1)
+                except (ValueError, TypeError, IndexError):
+                    # Fallback: draw a simple indicator if bbox format is wrong
+                    cv2.putText(frame, "BBOX FORMAT ERROR", (10, 50), 
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
             else:
                 # Fallback: draw a simple indicator if face detected but no bbox
                 cv2.putText(frame, "FACE DETECTED (NO BBOX)", (10, 50), 
