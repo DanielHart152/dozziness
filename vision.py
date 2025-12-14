@@ -208,17 +208,21 @@ class FaceDetector:
                             self.tracking_active = True
                             self.last_face_position = bbox
                             self.face_lost_frames = 0
+                            print(f"DEBUG: Face tracker initialized successfully at {bbox}")
                             return True
-                except:
+                except Exception as e:
+                    print(f"DEBUG: Tracker failed: {e}")
                     continue
             
             # If all trackers fail, disable tracking but continue with detection
             self.tracking_active = False
             self.face_tracker = None
+            print("DEBUG: All face trackers failed to initialize")
             return False
         except Exception as e:
             self.tracking_active = False
             self.face_tracker = None
+            print(f"DEBUG: Face tracker initialization error: {e}")
             return False
     
     def update_face_tracker(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
@@ -270,7 +274,7 @@ class FaceDetector:
                     face_rect = dlib.rectangle(x, y, x + w, y + h)
                     landmarks = self.predictor(gray, face_rect)
                     landmarks_array = np.array([[p.x, p.y] for p in landmarks.parts()])
-                    return (face_rect, landmarks_array, tracked_bbox)
+                    return (face_rect, landmarks_array, bbox, tracked_bbox)
                 else:
                     # OpenCV fallback with tracking
                     x, y, w, h = tracked_bbox
@@ -325,7 +329,7 @@ class FaceDetector:
         
         landmarks = self.predictor(gray, face_rect)
         landmarks_array = np.array([[p.x, p.y] for p in landmarks.parts()])
-        return (face_rect, landmarks_array, bbox)
+        return (face_rect, landmarks_array, bbox, bbox)  # Add bbox as 4th element for consistency
     
     def process_frame(self, frame: np.ndarray) -> Dict:
         """Process frame for drowsiness indicators."""
@@ -346,6 +350,11 @@ class FaceDetector:
         
         result['face_detected'] = True
         result['face_tracked'] = self.tracking_active
+        
+        # Debug tracking status
+        if not hasattr(self, '_last_tracking_state') or self._last_tracking_state != self.tracking_active:
+            print(f"DEBUG: Tracking state changed to: {self.tracking_active}")
+            self._last_tracking_state = self.tracking_active
         
         # Extract face bounding box for display (always show when face detected)
         face_bbox = None
@@ -376,10 +385,10 @@ class FaceDetector:
             
         # Check for face movement if tracking
         tracked_bbox = None
-        if len(face_data) >= 3:
-            tracked_bbox = face_data[-1]  # Last element should be bbox
-        elif len(face_data) >= 4:
-            tracked_bbox = face_data[3]   # Fourth element for OpenCV case
+        if len(face_data) >= 4:
+            tracked_bbox = face_data[3]   # Fourth element for bbox
+        elif len(face_data) >= 3:
+            tracked_bbox = face_data[2]   # Third element fallback
         
         if tracked_bbox is not None and isinstance(tracked_bbox, tuple) and len(tracked_bbox) == 4:
             result['face_movement_detected'] = self.detect_face_movement(tracked_bbox)

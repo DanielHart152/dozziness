@@ -64,7 +64,7 @@
     "debug_enabled": true,
     "debug_file": "scorer_debug.log",
     "debug_level": "DEBUG",
-    "debug_interval_seconds": 1000
+    "debug_interval_seconds": 5
   },
   "display": {
     "show_hud": true,
