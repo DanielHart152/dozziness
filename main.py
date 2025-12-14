@@ -108,11 +108,15 @@ class DrowsinessMonitor:
     def draw_tracking_visuals(self, frame: np.ndarray, metrics: Dict) -> np.ndarray:
         """Draw face bounding box and tracking line."""
         # Always draw face bounding box when face is detected
-        if metrics.get('face_detected', False):
-            face_bbox = metrics.get('face_bbox')
+        face_detected = metrics.get('face_detected', False)
+        face_bbox = metrics.get('face_bbox')
+        print(f"DISPLAY DEBUG: face_detected={face_detected}, face_bbox={face_bbox}")
+        
+        if face_detected:
             if face_bbox is not None:
                 try:
                     x, y, w, h = int(face_bbox[0]), int(face_bbox[1]), int(face_bbox[2]), int(face_bbox[3])
+                    print(f"DISPLAY DEBUG: Drawing bbox at ({x}, {y}, {w}, {h})")
                     # Green box for active tracking, blue for detection only
                     color = (0, 255, 0) if metrics.get('face_tracked', False) else (255, 0, 0)
                     thickness = 2 if metrics.get('face_tracked', False) else 1
@@ -125,14 +129,18 @@ class DrowsinessMonitor:
                     # Always draw center point
                     center_x, center_y = x + w//2, y + h//2
                     cv2.circle(frame, (center_x, center_y), 3, color, -1)
-                except (ValueError, TypeError, IndexError):
+                except (ValueError, TypeError, IndexError) as e:
+                    print(f"DISPLAY DEBUG: Exception drawing bbox: {e}")
                     # Fallback: draw a simple indicator if bbox format is wrong
                     cv2.putText(frame, "BBOX FORMAT ERROR", (10, 50), 
                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
             else:
+                print("DISPLAY DEBUG: face_bbox is None")
                 # Fallback: draw a simple indicator if face detected but no bbox
                 cv2.putText(frame, "FACE DETECTED (NO BBOX)", (10, 50), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+        else:
+            print("DISPLAY DEBUG: No face detected")
         
         # Draw tracking line (movement trail)
         current_center = metrics.get('tracking_center')
