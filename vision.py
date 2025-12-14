@@ -293,8 +293,15 @@ class FaceDetector:
                 self.init_face_tracker(frame, (x, y, w, h))
             
             roi_gray = gray[y:y+h, x:x+w]
-            eyes = self.eye_cascade.detectMultiScale(roi_gray)
+            eyes = self.eye_cascade.detectMultiScale(roi_gray, scaleFactor=1.1, minNeighbors=3, minSize=(10, 10))
             eye_count = len(eyes)
+            print(f"DEBUG: OpenCV eye detection - found {eye_count} eyes in face region")
+            
+            # If no eyes detected, assume eyes are open (normal state)
+            if eye_count == 0:
+                eye_count = 2  # Assume 2 eyes visible
+                print("DEBUG: No eyes detected, assuming eyes are open")
+            
             mock_landmarks = np.array([
                 [x + w//4, y + h//3], [x + w//2, y + h//3], [x + 3*w//4, y + h//3],
                 [x + w//2, y + h//2], [x + w//2, y + 4*h//5], [x + w//2, y + h//4],
@@ -364,7 +371,7 @@ class FaceDetector:
                 lx, ly, lw, lh = self.last_face_position
                 result['last_center'] = (lx + lw//2, ly + lh//2)
             self.last_face_position = face_bbox
-            print(f"DEBUG: Face bbox set: {face_bbox}")  # Debug output
+            # print(f"DEBUG: Face bbox set: {face_bbox}")  # Debug output
         else:
             print(f"DEBUG: Face detected but no valid bbox. face_bbox={face_bbox}, face_data length={len(face_data) if face_data else 0}")
         
@@ -406,10 +413,14 @@ class FaceDetector:
             result['avg_ear'] = avg_ear
             result['mar'] = 0.3
             result['head_pitch'] = 0.0
+            print(f"DEBUG: OpenCV mode - eye_count={eye_count}, eyes_visible={eyes_visible}, avg_ear={avg_ear}")
         
         eyes_closed = result['avg_ear'] < self.EYE_AR_THRESH
         result['eyes_closed'] = eyes_closed
         self.eye_state_history.append(eyes_closed)
+        
+        # Debug eye detection
+        print(f"DEBUG: EAR={result['avg_ear']:.3f}, threshold={self.EYE_AR_THRESH}, closed={eyes_closed}, use_dlib={self.use_dlib}")
         
         if eyes_closed:
             self.eye_closed_frames += 1
@@ -450,7 +461,9 @@ class FaceDetector:
         if len(self.eye_state_history) == 0:
             return 0.0
         closed_count = sum(self.eye_state_history)
-        return closed_count / len(self.eye_state_history)
+        perclos = closed_count / len(self.eye_state_history)
+        print(f"DEBUG: PERCLOS calc: {closed_count}/{len(self.eye_state_history)} = {perclos:.4f}")
+        return perclos
     
     def get_blinks_per_minute(self) -> float:
         """Calculate blinks per minute."""
@@ -459,9 +472,9 @@ class FaceDetector:
         fps = self.config['cameras']['fps']
         window_seconds = len(self.blink_history) / fps
         blink_count = sum(self.blink_history)
-        if window_seconds == 0:
-            return 0.0
-        return (blink_count / window_seconds) * 60.0
+        bpm = (blink_count / window_seconds) * 60.0 if window_seconds > 0 else 0.0
+        print(f"DEBUG: BPM calc: {blink_count} blinks in {window_seconds:.1f}s = {bpm:.1f} bpm")
+        return bpm
     
     def reset(self):
         """Reset all tracking counters."""
