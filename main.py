@@ -107,18 +107,23 @@ class DrowsinessMonitor:
     
     def draw_tracking_visuals(self, frame: np.ndarray, metrics: Dict) -> np.ndarray:
         """Draw face bounding box and tracking line."""
-        # Draw face bounding box
-        face_bbox = metrics.get('face_bbox')
-        if face_bbox is not None:
-            x, y, w, h = face_bbox
-            # Green box for active tracking, blue for detection only
-            color = (0, 255, 0) if metrics.get('face_tracked', False) else (255, 0, 0)
-            thickness = 2 if metrics.get('face_tracked', False) else 1
-            cv2.rectangle(frame, (x, y), (x + w, y + h), color, thickness)
-            
-            # Add label
-            label = "TRACKING" if metrics.get('face_tracked', False) else "DETECTED"
-            cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+        # Always draw face bounding box when face is detected
+        if metrics.get('face_detected', False):
+            face_bbox = metrics.get('face_bbox')
+            if face_bbox is not None:
+                x, y, w, h = face_bbox
+                # Green box for active tracking, blue for detection only
+                color = (0, 255, 0) if metrics.get('face_tracked', False) else (255, 0, 0)
+                thickness = 2 if metrics.get('face_tracked', False) else 1
+                cv2.rectangle(frame, (x, y), (x + w, y + h), color, thickness)
+                
+                # Add label
+                label = "TRACKING" if metrics.get('face_tracked', False) else "DETECTED"
+                cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+                
+                # Always draw center point
+                center_x, center_y = x + w//2, y + h//2
+                cv2.circle(frame, (center_x, center_y), 3, color, -1)
         
         # Draw tracking line (movement trail)
         current_center = metrics.get('tracking_center')
@@ -127,13 +132,9 @@ class DrowsinessMonitor:
         if current_center and last_center and current_center != last_center:
             # Draw line from last position to current position
             cv2.line(frame, last_center, current_center, (0, 255, 255), 2)
-            # Draw current center point
-            cv2.circle(frame, current_center, 3, (0, 255, 255), -1)
-            # Draw last center point
-            cv2.circle(frame, last_center, 2, (128, 128, 128), -1)
-        elif current_center:
-            # Just draw current center if no movement
-            cv2.circle(frame, current_center, 3, (0, 255, 0), -1)
+            # Draw movement indicator
+            cv2.putText(frame, "MOVEMENT", (current_center[0] - 30, current_center[1] - 20), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 255), 1)
         
         return frame
     
@@ -329,7 +330,7 @@ class DrowsinessMonitor:
             texting_detected=texting_detected, car_close=car_close
         )
         
-        should_alert = self.scorer.should_alert(risk_score)
+        should_alert = self.scorer.should_alert(score=risk_score)
         alert_triggered = False
         
         if should_alert:

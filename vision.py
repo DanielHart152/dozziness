@@ -188,13 +188,20 @@ class FaceDetector:
     
     def init_face_tracker(self, frame: np.ndarray, bbox: Tuple[int, int, int, int]):
         """Initialize face tracker with detected face bounding box."""
-        self.face_tracker = cv2.TrackerCSRT_create()
-        success = self.face_tracker.init(frame, bbox)
-        if success:
-            self.tracking_active = True
-            self.last_face_position = bbox
-            self.face_lost_frames = 0
-        return success
+        try:
+            self.face_tracker = cv2.TrackerCSRT_create()
+            success = self.face_tracker.init(frame, bbox)
+            if success:
+                self.tracking_active = True
+                self.last_face_position = bbox
+                self.face_lost_frames = 0
+                print(f"Face tracking initialized: {bbox}")
+            else:
+                print("Face tracker initialization failed")
+            return success
+        except Exception as e:
+            print(f"Error initializing face tracker: {e}")
+            return False
     
     def update_face_tracker(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
         """Update face tracker and return tracked bounding box."""
@@ -316,6 +323,28 @@ class FaceDetector:
         result['face_detected'] = True
         result['face_tracked'] = self.tracking_active
         
+        # Extract face bounding box for display (always show when face detected)
+        face_bbox = None
+        if self.use_dlib and len(face_data) >= 2:
+            face_rect = face_data[0]
+            if hasattr(face_rect, 'left'):
+                # dlib rectangle
+                face_bbox = (face_rect.left(), face_rect.top(), face_rect.width(), face_rect.height())
+            else:
+                # tuple format
+                face_bbox = face_rect
+        elif not self.use_dlib and len(face_data) >= 1:
+            face_bbox = face_data[0]  # OpenCV returns (x,y,w,h) as first element
+        
+        # Always set face_bbox when face is detected
+        if face_bbox:
+            result['face_bbox'] = face_bbox
+            x, y, w, h = face_bbox
+            result['tracking_center'] = (x + w//2, y + h//2)
+            if self.last_face_position:
+                lx, ly, lw, lh = self.last_face_position
+                result['last_center'] = (lx + lw//2, ly + lh//2)
+        
         # Check for face movement if tracking
         tracked_bbox = None
         if len(face_data) >= 3:
@@ -325,14 +354,6 @@ class FaceDetector:
         
         if tracked_bbox is not None and isinstance(tracked_bbox, tuple) and len(tracked_bbox) == 4:
             result['face_movement_detected'] = self.detect_face_movement(tracked_bbox)
-            result['face_bbox'] = tracked_bbox
-            # Calculate current center for tracking line
-            x, y, w, h = tracked_bbox
-            result['tracking_center'] = (x + w//2, y + h//2)
-            # Get last center if available
-            if self.last_face_position:
-                lx, ly, lw, lh = self.last_face_position
-                result['last_center'] = (lx + lw//2, ly + lh//2)
         
         if self.use_dlib and len(face_data) >= 2:
             face_rect, landmarks = face_data[0], face_data[1]
