@@ -189,18 +189,36 @@ class FaceDetector:
     def init_face_tracker(self, frame: np.ndarray, bbox: Tuple[int, int, int, int]):
         """Initialize face tracker with detected face bounding box."""
         try:
-            self.face_tracker = cv2.TrackerCSRT_create()
-            success = self.face_tracker.init(frame, bbox)
-            if success:
-                self.tracking_active = True
-                self.last_face_position = bbox
-                self.face_lost_frames = 0
-                print(f"Face tracking initialized: {bbox}")
-            else:
-                print("Face tracker initialization failed")
-            return success
+            # Try different trackers in order of preference
+            trackers = [
+                lambda: cv2.TrackerKCF_create(),
+                lambda: cv2.TrackerMOSSE_create(),
+                lambda: cv2.legacy.TrackerKCF_create() if hasattr(cv2, 'legacy') else None,
+                lambda: cv2.legacy.TrackerMOSSE_create() if hasattr(cv2, 'legacy') else None
+            ]
+            
+            for tracker_func in trackers:
+                try:
+                    if tracker_func is None:
+                        continue
+                    self.face_tracker = tracker_func()
+                    if self.face_tracker is not None:
+                        success = self.face_tracker.init(frame, bbox)
+                        if success:
+                            self.tracking_active = True
+                            self.last_face_position = bbox
+                            self.face_lost_frames = 0
+                            return True
+                except:
+                    continue
+            
+            # If all trackers fail, disable tracking but continue with detection
+            self.tracking_active = False
+            self.face_tracker = None
+            return False
         except Exception as e:
-            print(f"Error initializing face tracker: {e}")
+            self.tracking_active = False
+            self.face_tracker = None
             return False
     
     def update_face_tracker(self, frame: np.ndarray) -> Optional[Tuple[int, int, int, int]]:
@@ -270,8 +288,8 @@ class FaceDetector:
                 return None
             x, y, w, h = faces[0]
             
-            # Initialize tracker with detected face
-            if not self.tracking_active:
+            # Initialize tracker with detected face (only try once per detection)
+            if not self.tracking_active and self.face_tracker is None:
                 self.init_face_tracker(frame, (x, y, w, h))
             
             roi_gray = gray[y:y+h, x:x+w]
@@ -293,10 +311,10 @@ class FaceDetector:
         
         face_rect = faces[0]
         
-        # Initialize tracker with detected face
+        # Initialize tracker with detected face (only try once per detection)
         bbox = (face_rect.left(), face_rect.top(), 
                face_rect.width(), face_rect.height())
-        if not self.tracking_active:
+        if not self.tracking_active and self.face_tracker is None:
             self.init_face_tracker(frame, bbox)
         
         landmarks = self.predictor(gray, face_rect)
@@ -337,13 +355,15 @@ class FaceDetector:
             face_bbox = face_data[0]  # OpenCV returns (x,y,w,h) as first element
         
         # Always set face_bbox when face is detected
-        if face_bbox:
+        if face_bbox and len(face_bbox) == 4:
             result['face_bbox'] = face_bbox
             x, y, w, h = face_bbox
             result['tracking_center'] = (x + w//2, y + h//2)
-            if self.last_face_position:
+            # Update last position for movement detection
+            if self.last_face_position and self.last_face_position != face_bbox:
                 lx, ly, lw, lh = self.last_face_position
                 result['last_center'] = (lx + lw//2, ly + lh//2)
+            self.last_face_position = face_bbox
         
         # Check for face movement if tracking
         tracked_bbox = None
