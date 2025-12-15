@@ -1,0 +1,48 @@
+========================================
+MANUAL INSTALLATION STEPS
+========================================
+
+Since libatlas-base-dev is not available on your system,
+follow these steps manually:
+
+STEP 1: Install Python packages (you can skip BLAS/LAPACK)
+-----------------------------------------------------------
+pip3 install numpy opencv-python RPi.GPIO
+
+STEP 2: Try to install dlib (optional)
+--------------------------------------
+pip3 install dlib
+
+Note: If dlib fails, the system will automatically use OpenCV
+      Haar cascades as fallback. This is fine!
+
+STEP 3: Download shape predictor (optional)
+-------------------------------------------
+wget http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
+bunzip2 shape_predictor_68_face_landmarks.dat.bz2
+
+STEP 4: Test the system
+-----------------------
+python3 main.py
+
+The system will work even without:
+- libatlas-base-dev (not needed)
+- dlib (will use OpenCV fallback)
+- shape predictor (will use OpenCV fallback)
+
+========================================
+QUICK COMMANDS TO RUN NOW:
+========================================
+
+pip3 install numpy opencv-python RPi.GPIO
+
+# Optional - try dlib (may take 10-15 minutes)
+pip3 install dlib
+
+# Optional - download shape predictor
+wget http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2
+bunzip2 shape_predictor_68_face_landmarks.dat.bz2
+
+# Then test
+python3 main.py
+
