@@ -4,10 +4,10 @@
     "road_cam_index": 2,
     "_note": "Test cameras first with: python3 test_cameras.py",
     "resolution": {
-      "width": 1024,
-      "height": 480
+      "width": 640,
+      "height": 360
     },
-    "fps": 15
+    "fps": 8
   },
   "detection": {
     "eye_ar_threshold": 0.23,
