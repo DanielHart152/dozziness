@@ -312,25 +312,61 @@ class DrowsinessMonitor:
         
         return frame
     
-    def combine_camera_views(self, driver_frame: np.ndarray, road_frame: np.ndarray) -> np.ndarray:
-        """Combine driver and road camera frames side by side."""
-        h1, w1 = driver_frame.shape[:2]
-        h2, w2 = road_frame.shape[:2]
+    def add_object_detection_marks(self, frame: np.ndarray) -> np.ndarray:
+        """Add yellow object detection marks to road camera frame."""
+        if frame is None:
+            return frame
+            
+        # Simple object detection using background subtraction and contours
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
-        # Resize both frames to same height for side-by-side display
-        target_height = max(h1, h2)
-        driver_resized = cv2.resize(driver_frame, (int(w1 * target_height / h1), target_height))
-        road_resized = cv2.resize(road_frame, (int(w2 * target_height / h2), target_height))
+        # Apply Gaussian blur to reduce noise
+        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
         
-        # Add labels
-        cv2.putText(driver_resized, "DRIVER CAM", (10, 25),
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
-        cv2.putText(road_resized, "ROAD CAM", (10, 25),
+        # Use background subtractor for motion detection
+        if not hasattr(self, 'bg_subtractor_objects'):
+            self.bg_subtractor_objects = cv2.createBackgroundSubtractorMOG2(history=300, varThreshold=30, detectShadows=False)
+        
+        fg_mask = self.bg_subtractor_objects.apply(blurred)
+        
+        # Clean up the mask
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
+        fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_OPEN, kernel)
+        fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_CLOSE, kernel)
+        
+        # Find contours
+        contours, _ = cv2.findContours(fg_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        # Draw yellow bounding boxes around detected objects
+        h, w = frame.shape[:2]
+        min_area = (w * h) * 0.001  # Minimum 0.1% of frame area
+        max_area = (w * h) * 0.3    # Maximum 30% of frame area
+        
+        object_count = 0
+        for contour in contours:
+            area = cv2.contourArea(contour)
+            if min_area < area < max_area:
+                # Get bounding rectangle
+                x, y, cw, ch = cv2.boundingRect(contour)
+                
+                # Draw yellow bounding box
+                cv2.rectangle(frame, (x, y), (x + cw, y + ch), (0, 255, 255), 2)
+                
+                # Add object label
+                cv2.putText(frame, f"OBJ{object_count+1}", (x, y-5),
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
+                
+                # Draw center point
+                center_x, center_y = x + cw//2, y + ch//2
+                cv2.circle(frame, (center_x, center_y), 3, (0, 255, 255), -1)
+                
+                object_count += 1
+        
+        # Add object count to frame
+        cv2.putText(frame, f"Objects: {object_count}", (10, h-20),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
         
-        # Combine horizontally
-        combined = np.hstack([driver_resized, road_resized])
-        return combined
+        return frame
     
     def process_frame(self, driver_frame: np.ndarray, road_frame: Optional[np.ndarray] = None) -> Dict:
         """Process frames and return metrics."""
@@ -421,17 +457,24 @@ class DrowsinessMonitor:
                 
                 self.logger.log(metrics)
                 
-                # Display both cameras
+                # Display cameras in separate windows
                 try:
+                    # Always show driver camera
+                    cv2.imshow('Driver Camera - Drowsiness Monitor', driver_frame)
+                    
+                    # Show road camera with object detection if available
                     if road_frame is not None:
-                        # Combine both frames side by side
-                        combined_frame = self.combine_camera_views(driver_frame, road_frame)
-                        cv2.imshow('Driver Drowsiness Monitor - Driver | Road', combined_frame)
-                    else:
-                        # Only driver camera available
-                        cv2.imshow('Driver Drowsiness Monitor', driver_frame)
-                except:
-                    pass
+                        # Add yellow object detection marks
+                        road_frame_with_objects = self.add_object_detection_marks(road_frame.copy())
+                        cv2.imshow('Road Camera - Object Detection', road_frame_with_objects)
+                    
+                    # Position windows side by side (optional)
+                    cv2.moveWindow('Driver Camera - Drowsiness Monitor', 50, 50)
+                    if road_frame is not None:
+                        cv2.moveWindow('Road Camera - Object Detection', 700, 50)
+                        
+                except Exception as e:
+                    print(f"Display error: {e}")
                 
                 key = cv2.waitKey(1) & 0xFF
                 if key == ord('q'):
@@ -470,6 +513,8 @@ class DrowsinessMonitor:
             self.road_cam.release()
         
         try:
+            cv2.destroyWindow('Driver Camera - Drowsiness Monitor')
+            cv2.destroyWindow('Road Camera - Object Detection')
             cv2.destroyAllWindows()
         except:
             pass
