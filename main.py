@@ -56,11 +56,11 @@ class DrowsinessMonitor:
             time.sleep(0.5)
             
             if not self.driver_cam.isOpened():
-                print(f"❌ ERROR: Could not open driver camera at index {self.driver_cam_index}")
-                print("\nTroubleshooting:")
-                print("  1. Check camera is connected: ls -l /dev/video*")
-                print("  2. Try different camera index in config.json")
-                print("  3. Check camera permissions")
+                print(f"WARNING: Could not open driver camera at index {self.driver_cam_index}")
+                print("Will show candidate mode for both windows")
+                self.driver_cam = None
+                self.road_cam = None
+                self.road_cam_available = False
                 return False
             
             self.driver_cam.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
@@ -378,6 +378,43 @@ class DrowsinessMonitor:
         
         return frame
     
+    def create_driver_placeholder_frame(self) -> np.ndarray:
+        """Create placeholder frame for driver camera when not connected."""
+        frame = np.zeros((self.height, self.width, 3), dtype=np.uint8)
+        
+        # Add gradient background
+        for y in range(self.height):
+            intensity = int(40 + (y / self.height) * 60)
+            frame[y, :] = [intensity//3, intensity, intensity//2]
+        
+        # Add "DRIVER CAMERA NOT CONNECTED" text
+        cv2.putText(frame, "DRIVER CAMERA NOT CONNECTED", (10, 30),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        
+        cv2.putText(frame, "SHOWING CANDIDATE FACE", (10, 60),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+        
+        # Add candidate face with green bounding box
+        t = time.time()
+        face_x = int(self.width//2 - 60 + 20 * np.sin(t * 0.3))
+        face_y = int(self.height//2 - 40)
+        face_w, face_h = 120, 100
+        
+        # Draw green face bounding box
+        cv2.rectangle(frame, (face_x, face_y), (face_x + face_w, face_y + face_h), (0, 255, 0), 2)
+        cv2.putText(frame, "CANDIDATE FACE", (face_x, face_y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        cv2.circle(frame, (face_x + face_w//2, face_y + face_h//2), 3, (0, 255, 0), -1)
+        
+        # Add simulated metrics
+        cv2.putText(frame, "Risk Score: 25.0 (Simulated)", (10, self.height-80),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+        cv2.putText(frame, "PERCLOS: 0.150", (10, self.height-50),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(frame, "Blinks/min: 18.0", (10, self.height-20),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        
+        return frame
+    
     def create_placeholder_frame(self) -> np.ndarray:
         """Create placeholder frame with candidate objects when road camera not available."""
         frame = np.zeros((self.height, self.width, 3), dtype=np.uint8)
@@ -474,9 +511,9 @@ class DrowsinessMonitor:
     
     def run(self):
         """Main processing loop."""
-        if not self.initialize_cameras():
-            print("Failed to initialize cameras. Exiting.")
-            return
+        camera_initialized = self.initialize_cameras()
+        if not camera_initialized:
+            print("No cameras available - showing candidate mode only")
         
         print("\n" + "="*50)
         print("=== Drowsiness Monitor Started ===")
@@ -492,14 +529,19 @@ class DrowsinessMonitor:
             while self.running:
                 frame_start = time.time()
                 
-                ret_driver, driver_frame = self.driver_cam.read()
-                if not ret_driver or driver_frame is None:
-                    print("Error: Failed to read from driver camera")
-                    break
-                
-                h, w = driver_frame.shape[:2]
-                if w != self.width or h != self.height:
-                    driver_frame = cv2.resize(driver_frame, (self.width, self.height))
+                # Create driver frame (real camera or placeholder)
+                if self.driver_cam is not None:
+                    ret_driver, driver_frame = self.driver_cam.read()
+                    if not ret_driver or driver_frame is None:
+                        print("Error: Failed to read from driver camera")
+                        break
+                    
+                    h, w = driver_frame.shape[:2]
+                    if w != self.width or h != self.height:
+                        driver_frame = cv2.resize(driver_frame, (self.width, self.height))
+                else:
+                    # Create placeholder driver frame
+                    driver_frame = self.create_driver_placeholder_frame()
                 
                 # Always create a road frame (real camera or placeholder)
                 road_frame = None
@@ -519,7 +561,20 @@ class DrowsinessMonitor:
                     # Create placeholder frame with candidate objects
                     road_frame = self.create_placeholder_frame()
                 
-                metrics = self.process_frame(driver_frame, road_frame)
+                # Process frame (real or simulated)
+                if self.driver_cam is not None:
+                    metrics = self.process_frame(driver_frame, road_frame)
+                else:
+                    # Create simulated metrics for candidate mode
+                    metrics = {
+                        'perclos': 0.15, 'blinks_per_min': 18.0, 'risk_score': 25.0,
+                        'alert_triggered': False, 'yawn_detected': False,
+                        'nod_detected': False, 'texting_detected': False,
+                        'car_close': False, 'left_ear': 0.25, 'right_ear': 0.25,
+                        'mar': 0.4, 'head_pitch': 0.0, 'face_detected': True,
+                        'face_tracked': True, 'face_movement_detected': False,
+                        'face_bbox': None, 'tracking_center': None, 'last_center': None
+                    }
                 
                 if self.show_hud:
                     driver_frame = self.draw_hud(driver_frame, metrics)
@@ -534,19 +589,27 @@ class DrowsinessMonitor:
                     # Always show driver camera
                     cv2.imshow('Driver Camera - Drowsiness Monitor', driver_frame)
                     
-                    # Always show road camera window (real or placeholder)
+                    # Always show road camera window (real or placeholder) - smaller width
                     if road_frame is not None:
                         # Add yellow object detection marks
                         road_frame_with_objects = self.add_object_detection_marks(road_frame.copy())
-                        cv2.imshow('Road Camera - Object Detection', road_frame_with_objects)
+                        # Resize to smaller width
+                        h, w = road_frame_with_objects.shape[:2]
+                        new_width = int(w * 0.6)  # 60% of original width
+                        road_frame_resized = cv2.resize(road_frame_with_objects, (new_width, h))
+                        cv2.imshow('Road Camera - Object Detection', road_frame_resized)
                     else:
                         # Fallback placeholder
                         placeholder = self.create_placeholder_frame()
-                        cv2.imshow('Road Camera - Object Detection', placeholder)
+                        h, w = placeholder.shape[:2]
+                        new_width = int(w * 0.6)  # 60% of original width
+                        placeholder_resized = cv2.resize(placeholder, (new_width, h))
+                        cv2.imshow('Road Camera - Object Detection', placeholder_resized)
                     
-                    # Position windows side by side (always)
-                    cv2.moveWindow('Driver Camera - Drowsiness Monitor', 50, 50)
-                    cv2.moveWindow('Road Camera - Object Detection', 700, 50)
+                    # Only position windows on first frame, then allow user control
+                    if self.frame_count == 1:
+                        cv2.moveWindow('Driver Camera - Drowsiness Monitor', 50, 50)
+                        cv2.moveWindow('Road Camera - Object Detection', 700, 50)
                         
                 except Exception as e:
                     print(f"Display error: {e}")
