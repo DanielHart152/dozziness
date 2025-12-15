@@ -4,7 +4,7 @@
     "road_cam_index": 1,
     "_note": "Test cameras first with: python3 test_cameras.py",
     "resolution": {
-      "width": 640,
+      "width": 1024,
       "height": 480
     },
     "fps": 15
