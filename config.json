@@ -47,10 +47,16 @@
     "hold_off_sec": 2.0,
     "buzzer_gpio_pin": 18,
     "mute_button_gpio_pin": 16,
-    "cooldown_seconds": 8,
+    "cooldown_seconds": 3,
     "mute_duration_seconds": 30,
     "buzzer_frequency_hz": 2000,
-    "buzzer_duration_ms": 500
+    "buzzer_duration_ms": 2000,
+    "variable_duration": true,
+    "low_risk_duration_ms": 1000,
+    "medium_risk_duration_ms": 2500,
+    "high_risk_duration_ms": 4000,
+    "low_risk_threshold": 70,
+    "high_risk_threshold": 85
   },
   "road_detection": {
     "car_close_threshold": 0.3,

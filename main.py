@@ -357,7 +357,7 @@ class DrowsinessMonitor:
         alert_triggered = False
         
         if should_alert:
-            alert_triggered = self.alert_manager.trigger_alert()
+            alert_triggered = self.alert_manager.trigger_alert(risk_score=risk_score)
         
         metrics = {
             'perclos': perclos, 'blinks_per_min': blinks_per_min, 'risk_score': risk_score,

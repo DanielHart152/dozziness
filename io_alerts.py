@@ -26,6 +26,15 @@ class AlertManager:
         self.mute_duration_seconds = alerts['mute_duration_seconds']
         self.buzzer_frequency = alerts['buzzer_frequency_hz']
         self.buzzer_duration_ms = alerts['buzzer_duration_ms']
+        
+        # Variable duration settings
+        self.variable_duration = alerts.get('variable_duration', False)
+        self.low_risk_duration_ms = alerts.get('low_risk_duration_ms', 1000)
+        self.medium_risk_duration_ms = alerts.get('medium_risk_duration_ms', 2500)
+        self.high_risk_duration_ms = alerts.get('high_risk_duration_ms', 4000)
+        self.low_risk_threshold = alerts.get('low_risk_threshold', 70)
+        self.high_risk_threshold = alerts.get('high_risk_threshold', 85)
+        
         self.last_alert_time = 0.0
         self.mute_until = 0.0
         self.is_muted = False
@@ -67,8 +76,20 @@ class AlertManager:
             self.is_muted = False
             print("Mute period expired - alerts re-enabled")
     
-    def trigger_alert(self, force: bool = False) -> bool:
-        """Trigger buzzer alert if conditions are met."""
+    def get_alert_duration(self, risk_score: float) -> int:
+        """Get buzzer duration based on risk score level."""
+        if not self.variable_duration:
+            return self.buzzer_duration_ms
+        
+        if risk_score < self.low_risk_threshold:
+            return self.low_risk_duration_ms
+        elif risk_score < self.high_risk_threshold:
+            return self.medium_risk_duration_ms
+        else:
+            return self.high_risk_duration_ms
+    
+    def trigger_alert(self, force: bool = False, risk_score: float = 70.0) -> bool:
+        """Trigger buzzer alert with variable duration based on risk score."""
         current_time = time.time()
         self.check_mute_status()
         
@@ -79,16 +100,34 @@ class AlertManager:
             if time_since_last < self.cooldown_seconds:
                 return False
         
+        # Get duration based on risk score
+        duration_ms = self.get_alert_duration(risk_score)
+        
         if self.gpio_available:
             try:
+                # Method 1: Try PWM buzzer (for passive buzzers)
+                risk_level = "LOW" if risk_score < self.low_risk_threshold else "MEDIUM" if risk_score < self.high_risk_threshold else "HIGH"
+                print(f"🔊 {risk_level} RISK Alert! Score: {risk_score:.1f}, Duration: {duration_ms}ms")
                 buzzer = GPIO.PWM(self.buzzer_pin, self.buzzer_frequency)
-                buzzer.start(50)
-                time.sleep(self.buzzer_duration_ms / 1000.0)
+                buzzer.start(50)  # 50% duty cycle
+                time.sleep(duration_ms / 1000.0)
                 buzzer.stop()
+                print("✅ PWM buzzer completed")
             except Exception as e:
-                print(f"Error triggering buzzer: {e}")
+                print(f"❌ PWM buzzer failed: {e}")
+                try:
+                    # Method 2: Try simple on/off (for active buzzers)
+                    print(f"🔊 Trying simple on/off on GPIO {self.buzzer_pin}...")
+                    GPIO.output(self.buzzer_pin, GPIO.HIGH)
+                    time.sleep(duration_ms / 1000.0)
+                    GPIO.output(self.buzzer_pin, GPIO.LOW)
+                    print("✅ Simple buzzer completed")
+                except Exception as e2:
+                    print(f"❌ Simple buzzer also failed: {e2}")
+                    print(f"💡 Check: GPIO {self.buzzer_pin} wiring, buzzer type, permissions")
         else:
-            print(f"[BUZZER] Alert triggered! (Frequency: {self.buzzer_frequency}Hz, Duration: {self.buzzer_duration_ms}ms)")
+            risk_level = "LOW" if risk_score < self.low_risk_threshold else "MEDIUM" if risk_score < self.high_risk_threshold else "HIGH"
+            print(f"[BUZZER] {risk_level} RISK Alert! Score: {risk_score:.1f}, Duration: {duration_ms}ms")
         
         self.last_alert_time = current_time
         return True
